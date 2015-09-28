@@ -28,43 +28,89 @@ public class CodeWindow extends javax.swing.JFrame {
 
         jScrollPane1 = new javax.swing.JScrollPane();
         text = new javax.swing.JTextArea();
+        cbArrayType = new javax.swing.JComboBox();
 
         text.setColumns(20);
         text.setFont(new java.awt.Font("Consolas", 0, 14)); // NOI18N
         text.setRows(5);
         jScrollPane1.setViewportView(text);
 
+        cbArrayType.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "int", "char", "String", "Variable" }));
+        cbArrayType.addItemListener(new java.awt.event.ItemListener() {
+            public void itemStateChanged(java.awt.event.ItemEvent evt) {
+                cbArrayTypeItemStateChanged(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 963, Short.MAX_VALUE)
             .addGroup(layout.createSequentialGroup()
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 963, Short.MAX_VALUE)
-                .addGap(0, 0, 0))
+                .addContainerGap()
+                .addComponent(cbArrayType, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 498, Short.MAX_VALUE)
-                .addGap(0, 0, 0))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addGap(6, 6, 6)
+                .addComponent(cbArrayType, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 468, Short.MAX_VALUE)
+                .addContainerGap())
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    private void cbArrayTypeItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_cbArrayTypeItemStateChanged
+        setList(lst);
+    }//GEN-LAST:event_cbArrayTypeItemStateChanged
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JComboBox cbArrayType;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTextArea text;
     // End of variables declaration//GEN-END:variables
 
-    StringBuilder sb = new StringBuilder();
+    private List<String[][]> lst;
+    private final StringBuilder sb = new StringBuilder();
 
-    public void setList(List<char[][]> list) {
-        sb.append("char[][][] arr = {\n");
+    private String getArrayType() {
+        switch (cbArrayType.getSelectedIndex()) {
+            case 0:
+                return "int";
+            case 1:
+                return "char";
+            case 2:
+                return "String";
+            default:
+                return "";
+        }
+    }
+
+    private String getArrayDelimiter() {
+        switch (cbArrayType.getSelectedIndex()) {
+            case 0:
+                return "";
+            case 1:
+                return "'";
+            case 2:
+                return "\"";
+            default:
+                return "";
+        }
+    }
+
+    public void setList(List<String[][]> list) {
+        this.lst = list;
+        sb.append("public static ").append(getArrayType()).append("[][][] arr = {\n");
 
         for (int index = 0; index < list.size(); index++) {
-            char[][] arr = list.get(index);
+            Object[][] arr = list.get(index);
 
             sb.append("{\n");
 
@@ -73,13 +119,9 @@ public class CodeWindow extends javax.swing.JFrame {
                 sb.append("\t{");
 
                 for (int lin = 0; lin < arr[col].length; lin++) {
-                    char val = arr[lin][col];
+                    Object val = arr[lin][col];
 
-                    if (val == 0) {
-                        val = ' ';
-                    }
-
-                    sb.append("'").append(val).append("'");
+                    sb.append(getArrayDelimiter()).append(val).append(getArrayDelimiter());
 
                     if (lin < arr[col].length - 1) {
                         sb.append(", ");
@@ -105,6 +147,7 @@ public class CodeWindow extends javax.swing.JFrame {
         sb.append("};");
 
         text.setText(sb.toString());
+        sb.delete(0, sb.length());
     }
 
     private void monta() {

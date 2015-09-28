@@ -5,6 +5,8 @@
  */
 package br.com.mvbos.ame;
 
+import javax.swing.SwingUtilities;
+
 /**
  *
  * @author Marcus Becker
@@ -39,7 +41,8 @@ public class app {
         //</editor-fold>
 
         /* Create and display the form */
-        java.awt.EventQueue.invokeLater(new Runnable() {
+        SwingUtilities.invokeLater(new Runnable() {
+            @Override
             public void run() {
                 new Window().setVisible(true);
             }

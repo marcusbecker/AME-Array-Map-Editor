@@ -1,11 +1,8 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package br.com.mvbos.ame;
 
 import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.Font;
 import java.awt.Graphics;
 
 import java.awt.Point;
@@ -16,6 +13,7 @@ import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
 import java.util.ArrayList;
 import java.util.List;
+import javax.swing.JButton;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.Timer;
@@ -28,15 +26,32 @@ public class Window extends javax.swing.JFrame {
 
     private final Timer timer;
 
-    private CodeWindow cw = new CodeWindow();
-    
+    private final CodeWindow cw = new CodeWindow();
+    private final Dimension grid = new Dimension();
+
+    private String defVal = " ";
+    private String valSel;
+
+    private int index;
+    private final List<String[][]> list = new ArrayList<>(10);
+
+    private Point size = new Point(810, 600);
+
+    private Point pxy = new Point(0, 0);
+
+    private final Color front = Color.LIGHT_GRAY;
+    private final Color back = new Color(248, 248, 248);
+    private final Color line = new Color(0, 153, 255);
+    private final Color fill = Color.DARK_GRAY;
+
+    //private char[] copy;// = new char[18];
+    //private Point start;
+    //private Point end;
     /**
      * Creates new form Window
      */
     public Window() {
         initComponents();
-
-        list.add(new char[18][18]);
 
         //createCanvas();
         timer = new Timer(100, new ActionListener() {
@@ -62,75 +77,44 @@ public class Window extends javax.swing.JFrame {
     private void initComponents() {
 
         jPanel1 = new javax.swing.JPanel();
-        jComboBox1 = new javax.swing.JComboBox();
-        jTextField1 = new javax.swing.JTextField();
-        jTextField2 = new javax.swing.JTextField();
-        jLabel1 = new javax.swing.JLabel();
-        jTextField3 = new javax.swing.JTextField();
         canvas = createCanvas();
         jPanel3 = new javax.swing.JPanel();
-        jTextField4 = new javax.swing.JTextField();
+        tfGridWid = new javax.swing.JTextField();
         jLabel2 = new javax.swing.JLabel();
-        jTextField5 = new javax.swing.JTextField();
+        tfGridHei = new javax.swing.JTextField();
         btnLeft = new javax.swing.JButton();
         btnRigth = new javax.swing.JButton();
         btnRemove = new javax.swing.JButton();
         btnAdd = new javax.swing.JButton();
-        btnCopyLine = new javax.swing.JToggleButton();
-        btnCopyColumn = new javax.swing.JToggleButton();
+        btnFillLine = new javax.swing.JToggleButton();
+        btnFillColumn = new javax.swing.JToggleButton();
         lblIdx = new javax.swing.JLabel();
         lblCount = new javax.swing.JLabel();
-        jLabel5 = new javax.swing.JLabel();
+        lblValueSelected = new javax.swing.JLabel();
+        btnEmptyLinCol = new javax.swing.JToggleButton();
+        jTabbedPane1 = new javax.swing.JTabbedPane();
+        pnDefault = new javax.swing.JPanel();
+        btn1 = new javax.swing.JButton();
+        btnFill = new javax.swing.JToggleButton();
         jPanel4 = new javax.swing.JPanel();
         lblPosition = new javax.swing.JLabel();
         btnCode = new javax.swing.JButton();
         jMenuBar1 = new javax.swing.JMenuBar();
         jMenu1 = new javax.swing.JMenu();
+        miNewGrid = new javax.swing.JMenuItem();
         jMenu2 = new javax.swing.JMenu();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-
-        jComboBox1.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "int", "char", "boolean" }));
-
-        jTextField1.setText(" ,0");
-
-        jTextField2.setText("18");
-
-        jLabel1.setText(" x ");
-
-        jTextField3.setText("18");
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, 85, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 188, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jLabel1)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jTextField3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(350, Short.MAX_VALUE))
+            .addGap(0, 765, Short.MAX_VALUE)
         );
-
-        jPanel1Layout.linkSize(javax.swing.SwingConstants.HORIZONTAL, new java.awt.Component[] {jTextField2, jTextField3});
-
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel1)
-                    .addComponent(jTextField3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap())
+            .addGap(0, 42, Short.MAX_VALUE)
         );
 
         canvas.setBackground(new java.awt.Color(0, 153, 204));
@@ -146,11 +130,12 @@ public class Window extends javax.swing.JFrame {
             .addGap(0, 0, Short.MAX_VALUE)
         );
 
-        jTextField4.setText("800");
+        tfGridWid.setText("0");
 
+        jLabel2.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel2.setText(" x ");
 
-        jTextField5.setText("600");
+        tfGridHei.setText("0");
 
         btnLeft.setText("<");
         btnLeft.addActionListener(new java.awt.event.ActionListener() {
@@ -180,9 +165,9 @@ public class Window extends javax.swing.JFrame {
             }
         });
 
-        btnCopyLine.setText("--");
+        btnFillLine.setText("--");
 
-        btnCopyColumn.setText("|");
+        btnFillColumn.setText("|");
 
         lblIdx.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         lblIdx.setText("100");
@@ -190,57 +175,75 @@ public class Window extends javax.swing.JFrame {
         lblCount.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         lblCount.setText("100");
 
-        jLabel5.setText("jLabel5");
+        lblValueSelected.setText("Value selected");
+
+        btnEmptyLinCol.setText("#");
+
+        pnDefault.setBackground(new java.awt.Color(204, 204, 204));
+        pnDefault.setLayout(new java.awt.GridLayout(5, 5));
+
+        btn1.setText("+");
+        pnDefault.add(btn1);
+
+        jTabbedPane1.addTab("Default", pnDefault);
+
+        btnFill.setText("Fill");
 
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
         jPanel3Layout.setHorizontalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(jTabbedPane1)
             .addGroup(jPanel3Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(btnFill, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(lblValueSelected, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(jPanel3Layout.createSequentialGroup()
                         .addComponent(btnLeft)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(lblIdx, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(lblIdx, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(btnRigth))
                     .addGroup(jPanel3Layout.createSequentialGroup()
-                        .addComponent(btnAdd)
+                        .addComponent(btnFillLine)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(lblCount, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(btnFillColumn)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(btnRemove))
+                        .addComponent(btnEmptyLinCol))
                     .addGroup(jPanel3Layout.createSequentialGroup()
+                        .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                            .addComponent(tfGridWid)
+                            .addComponent(btnAdd, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(jPanel3Layout.createSequentialGroup()
-                                .addComponent(btnCopyLine)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(btnCopyColumn))
-                            .addGroup(jPanel3Layout.createSequentialGroup()
-                                .addComponent(jTextField4, javax.swing.GroupLayout.PREFERRED_SIZE, 52, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jLabel2)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jTextField5, javax.swing.GroupLayout.PREFERRED_SIZE, 52, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                        .addGap(0, 0, Short.MAX_VALUE)))
+                            .addComponent(lblCount, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(tfGridHei)
+                            .addComponent(btnRemove, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
                 .addContainerGap())
         );
 
-        jPanel3Layout.linkSize(javax.swing.SwingConstants.HORIZONTAL, new java.awt.Component[] {lblCount, lblIdx});
-
         jPanel3Layout.linkSize(javax.swing.SwingConstants.HORIZONTAL, new java.awt.Component[] {btnAdd, btnLeft, btnRemove, btnRigth});
+
+        jPanel3Layout.linkSize(javax.swing.SwingConstants.HORIZONTAL, new java.awt.Component[] {btnEmptyLinCol, btnFillColumn, btnFillLine});
 
         jPanel3Layout.setVerticalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
-                .addContainerGap(211, Short.MAX_VALUE)
-                .addComponent(jLabel5)
-                .addGap(18, 18, 18)
+                .addContainerGap()
+                .addComponent(jTabbedPane1)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(lblValueSelected)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(btnFill)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(btnCopyLine)
-                    .addComponent(btnCopyColumn))
+                    .addComponent(btnFillLine)
+                    .addComponent(btnFillColumn)
+                    .addComponent(btnEmptyLinCol))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnLeft)
@@ -253,11 +256,13 @@ public class Window extends javax.swing.JFrame {
                     .addComponent(lblCount))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jTextField4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(tfGridWid, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel2)
-                    .addComponent(jTextField5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(tfGridHei, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap())
         );
+
+        jPanel3Layout.linkSize(javax.swing.SwingConstants.VERTICAL, new java.awt.Component[] {btnAdd, btnEmptyLinCol, btnFillColumn, btnFillLine, btnLeft, btnRemove, btnRigth});
 
         lblPosition.setText("0,0");
 
@@ -290,6 +295,16 @@ public class Window extends javax.swing.JFrame {
         );
 
         jMenu1.setText("File");
+
+        miNewGrid.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_N, java.awt.event.InputEvent.CTRL_MASK));
+        miNewGrid.setText("New");
+        miNewGrid.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                miNewGridActionPerformed(evt);
+            }
+        });
+        jMenu1.add(miNewGrid);
+
         jMenuBar1.add(jMenu1);
 
         jMenu2.setText("Edit");
@@ -307,10 +322,10 @@ public class Window extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(canvas, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addContainerGap())
-                    .addComponent(jPanel1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                    .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -330,7 +345,7 @@ public class Window extends javax.swing.JFrame {
 
     private void btnAddActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddActionPerformed
 
-        list.add(new char[18][18]);
+        list.add(newGrid(grid, defVal));
         index++;
 
         updateLabels();
@@ -350,24 +365,70 @@ public class Window extends javax.swing.JFrame {
     }//GEN-LAST:event_btnRemoveActionPerformed
 
     private void btnCodeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCodeActionPerformed
-       viewCode();
+        viewCode();
     }//GEN-LAST:event_btnCodeActionPerformed
 
-    private int index;
-    private List<char[][]> list = new ArrayList<>(10);
+    private List<JButton> buttonValues = new ArrayList<>(5);
 
-    //private char[][] gridArray = new char[18][18];
-    private Point grid = new Point(18, 18);
-    private Point size = new Point(810, 600);
+    private void miNewGridActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_miNewGridActionPerformed
 
-    private Point pxy = new Point(0, 0);
+        NewGridJDialog dialog = new NewGridJDialog(this, true);
+        dialog.setLocationRelativeTo(this);
+        dialog.setVisible(true);
 
-    private Color front = Color.LIGHT_GRAY;
-    private Color back = Color.WHITE;
-    private Color line = Color.BLUE;
-    private Color fill = Color.DARK_GRAY;
+        if (!dialog.isOk()) {
+            return;
+        }
 
-    private char[] copy;// = new char[18];
+        for (JButton b : buttonValues) {
+            pnDefault.remove(b);
+        }
+        list.clear();
+        buttonValues.clear();
+
+        grid.width = dialog.getGridWidth();
+        grid.height = dialog.getGridHeight();
+        tfGridWid.setText(String.valueOf(dialog.getGridWidth()));
+        tfGridHei.setText(String.valueOf(dialog.getGridHeight()));
+
+        defVal = dialog.getDefaultValue();
+        valSel = defVal;
+        list.add(newGrid(grid, defVal));
+
+        JButton btn;
+
+        btn = new JButton(dialog.getDefaultValue());
+        btn.addActionListener(new java.awt.event.ActionListener() {
+            @Override
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                selectValue(((JButton) evt.getSource()).getText());
+            }
+        });
+
+        buttonValues.add(btn);
+
+        for (String v : dialog.getValues()) {
+            btn = new JButton(v);
+            btn.addActionListener(new java.awt.event.ActionListener() {
+                @Override
+                public void actionPerformed(java.awt.event.ActionEvent evt) {
+                    selectValue(((JButton) evt.getSource()).getText());
+                }
+            });
+
+            buttonValues.add(btn);
+        }
+
+        for (JButton b : buttonValues) {
+            pnDefault.add(b);
+        }
+
+    }//GEN-LAST:event_miNewGridActionPerformed
+
+    private void selectValue(String val) {
+        valSel = val;
+        lblValueSelected.setText(String.format("Value selected: %s", val));
+    }
 
     private JPanel createCanvas() {
         JPanel c = new JPanel() {
@@ -375,27 +436,41 @@ public class Window extends javax.swing.JFrame {
             @Override
             public void paint(Graphics g) {
                 if (list.isEmpty()) {
+                    super.paint(g);
                     return;
                 }
 
                 size = new Point(getWidth(), getHeight());
-                int x = size.x / grid.x;
-                int y = size.y / grid.y;
-//System.out.printf("x %d y %d - px %d py %d\n", getWidth(), getHeight(), size.x, size.y);
-                //super.paint(g);
+                int x = size.x / grid.width;
+                int y = size.y / grid.height;
+
+                int sp = x / 4;
+
+                //System.out.printf("x %d y %d - px %d py %d\n", x, y, getWidth(), getHeight());
                 g.setColor(back);
                 g.fillRect(0, 0, getWidth(), getHeight());
 
-                g.setColor(fill);
+                String[][] gridArray = list.get(index);
 
-                char[][] gridArray = list.get(index);
+                g.setColor(fill);
 
                 for (int col = 0; col < gridArray.length; col++) {
                     for (int lin = 0; lin < gridArray[0].length; lin++) {
-                        char value = gridArray[col][lin];
+                        String value = gridArray[col][lin];
 
-                        if (value == 'c') {
-                            g.fillRect(col * x, lin * y, x, y);
+                        if (value != null) {
+
+                            if (btnFill.isSelected() && !defVal.equals(value)) {
+                                g.setColor(fill);
+                                g.fillRect(col * x, lin * y, x, y);
+                                g.setColor(back);
+                            }
+
+                            /*if (" ".equals(value)) 
+                             g.drawString("[]", col * x + x / 2, lin * y + y / 2);*/
+                            int fSize = x / 3;
+                            g.setFont(new Font("arial", Font.PLAIN, fSize));
+                            g.drawString(value, col * x + fSize, lin * y + fSize);
                         }
                     }
                 }
@@ -413,8 +488,37 @@ public class Window extends javax.swing.JFrame {
                 g.setColor(front);
                 //int px = e.getPoint().x / x;
                 //int py = e.getPoint().y / y;
-                int sp = x / 4;
+
                 g.drawRect(pxy.x - x / 2 + sp, pxy.y - y / 2 + sp, x - sp, y - sp);
+
+                if (btnFillLine.isSelected()) {
+                    for (int i = 0; i < getWidth(); i += x) {
+                        g.drawRect(i + sp, pxy.y - y / 2 + sp, x / 2, y / 2);
+                    }
+                }
+
+                if (btnFillColumn.isSelected()) {
+                    for (int i = 0; i < getHeight(); i += y) {
+                        g.drawRect(pxy.x - x / 2 + sp, i + sp, x / 2, y / 2);
+                    }
+                }
+
+                /*TODO on mouse press;
+                 if (start != null) {
+                 //System.out.print("start " + start);
+                 //System.out.println(" pxy " + pxy);
+
+                 int temp = (pxy.y - start.y) / 18;
+                 int tt = 0;
+                 //System.out.println("te " + temp);
+                 for (int i = start.x; i < pxy.x; i += x) {
+                 //g.drawRect(i - x / 2 + sp, i - y / 2 + sp, x - sp, y - sp);
+                 g.drawRect(i - x / 2 + sp, start.y + tt * temp, x - sp, y - sp);
+                 tt++;
+                 }
+                 } {
+
+                 }*/
             }
 
         };
@@ -423,39 +527,53 @@ public class Window extends javax.swing.JFrame {
 
             @Override
             public void mouseClicked(MouseEvent e) {
-                int x = size.x / grid.x;
-                int y = size.y / grid.y;
+                int x = size.x / grid.width;
+                int y = size.y / grid.height;
 
                 int px = e.getPoint().x / x;
                 int py = e.getPoint().y / y;
 
                 if (e.getButton() == MouseEvent.BUTTON1) {
-                    char[][] gridArray = list.get(index);
+                    String[][] gridArray = list.get(index);
                     //System.out.printf("x %d y %d - px %d py %d\n", x, y, px, py);
 
                     if (!isValid(px, py, gridArray)) {
                         return;
                     }
 
-                    gridArray[px][py] = gridArray[px][py] == 0 ? 'c' : 0;
+                    if (btnFillLine.isSelected() || btnFillColumn.isSelected()) {
 
-                } else {
-                    copy = new char[18];
+                        if (btnFillLine.isSelected()) {
+                            for (int i = 0; i < gridArray.length; i++) {
+                                gridArray[i][py] = btnEmptyLinCol.isSelected() ? defVal : valSel;
+                            }
+                        }
 
-                    if (btnCopyLine.isSelected()) {
+                        if (btnFillColumn.isSelected()) {
+                            for (int i = 0; i < gridArray[0].length; i++) {
+                                gridArray[px][i] = btnEmptyLinCol.isSelected() ? defVal : valSel;
+                            }
+                        }
 
+                    } else {
+                        gridArray[px][py] = defVal.equals(gridArray[px][py]) ? valSel : defVal;
+
+                        //System.out.println("defVal " + defVal);
+                        //System.out.println("valSel " + valSel);
+                        //System.out.println("gridArray[px][py] " + gridArray[px][py]);
                     }
                 }
             }
 
             @Override
             public void mousePressed(MouseEvent e) {
-                //System.out.print("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+                //start = e.getPoint();
             }
 
             @Override
             public void mouseReleased(MouseEvent e) {
-                //System.out.print("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+                //start = null;
+                //end = e.getPoint();
             }
 
             @Override
@@ -474,60 +592,69 @@ public class Window extends javax.swing.JFrame {
 
             @Override
             public void mouseDragged(MouseEvent e) {
-                //System.out.print("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+                pxy = e.getPoint();
+                updateMousePosition();
             }
 
             @Override
             public void mouseMoved(MouseEvent e) {
                 pxy = e.getPoint();
-
-                int px = pxy.x / (size.x / grid.x);
-                int py = pxy.y / (size.y / grid.y);
-
-                if (px >= grid.x || py >= grid.y) {
-                    lblPosition.setForeground(Color.RED);
-                } else {
-                    lblPosition.setForeground(Color.BLACK);
-                }
-
-                lblPosition.setText(String.format("lin %d, col %d", py, px));
+                updateMousePosition();
             }
         });
 
         return c;
     }
 
-    private boolean isValid(int px, int py, char[][] gridArray) {
+    private void updateMousePosition() {
+        if (grid.width == 0 || grid.height == 0) {
+            return;
+        }
+
+        int px = pxy.x / (size.x / grid.width);
+        int py = pxy.y / (size.y / grid.height);
+
+        if (px >= grid.width || py >= grid.height) {
+            lblPosition.setForeground(Color.RED);
+        } else {
+            lblPosition.setForeground(Color.BLACK);
+        }
+
+        lblPosition.setText(String.format("lin %d, col %d", py, px));
+    }
+
+    private boolean isValid(int px, int py, Object[][] gridArray) {
         return px >= 0 && px < gridArray.length && py >= 0 && py < gridArray[0].length;
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btn1;
     private javax.swing.JButton btnAdd;
     private javax.swing.JButton btnCode;
-    private javax.swing.JToggleButton btnCopyColumn;
-    private javax.swing.JToggleButton btnCopyLine;
+    private javax.swing.JToggleButton btnEmptyLinCol;
+    private javax.swing.JToggleButton btnFill;
+    private javax.swing.JToggleButton btnFillColumn;
+    private javax.swing.JToggleButton btnFillLine;
     private javax.swing.JButton btnLeft;
     private javax.swing.JButton btnRemove;
     private javax.swing.JButton btnRigth;
     private javax.swing.JPanel canvas;
-    private javax.swing.JComboBox jComboBox1;
-    private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
-    private javax.swing.JLabel jLabel5;
     private javax.swing.JMenu jMenu1;
     private javax.swing.JMenu jMenu2;
     private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanel4;
-    private javax.swing.JTextField jTextField1;
-    private javax.swing.JTextField jTextField2;
-    private javax.swing.JTextField jTextField3;
-    private javax.swing.JTextField jTextField4;
-    private javax.swing.JTextField jTextField5;
+    private javax.swing.JTabbedPane jTabbedPane1;
     private javax.swing.JLabel lblCount;
     private javax.swing.JLabel lblIdx;
     private javax.swing.JLabel lblPosition;
+    private javax.swing.JLabel lblValueSelected;
+    private javax.swing.JMenuItem miNewGrid;
+    private javax.swing.JPanel pnDefault;
+    private javax.swing.JTextField tfGridHei;
+    private javax.swing.JTextField tfGridWid;
     // End of variables declaration//GEN-END:variables
 
     private void go(int id) {
@@ -555,7 +682,7 @@ public class Window extends javax.swing.JFrame {
                 list.remove(index);
                 go(-1);
             } else {
-                list.set(index, new char[18][18]);
+                list.set(index, newGrid(grid, defVal));
             }
         }
     }
@@ -563,5 +690,17 @@ public class Window extends javax.swing.JFrame {
     private void viewCode() {
         cw.setList(list);
         cw.setVisible(true);
+    }
+
+    private String[][] newGrid(Dimension grid, String defVal) {
+        String[][] arr = new String[grid.width][grid.height];
+
+        for (String[] a : arr) {
+            for (int j = 0; j < a.length; j++) {
+                a[j] = defVal;
+            }
+        }
+
+        return arr;
     }
 }

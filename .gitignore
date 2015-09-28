@@ -45,3 +45,5 @@ Temporary Items
 nbproject
 build.xml
 manifest.mf
+/build/
+/dist/
