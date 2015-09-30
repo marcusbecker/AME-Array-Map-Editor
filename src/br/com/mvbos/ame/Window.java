@@ -4,6 +4,7 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Graphics;
+import java.awt.GridLayout;
 
 import java.awt.Point;
 import java.awt.event.ActionEvent;
@@ -31,6 +32,7 @@ public class Window extends javax.swing.JFrame {
 
     private String defVal = " ";
     private String valSel;
+    private JButton selected;
 
     private int index;
     private final List<String[][]> list = new ArrayList<>(10);
@@ -39,10 +41,12 @@ public class Window extends javax.swing.JFrame {
 
     private Point pxy = new Point(0, 0);
 
-    private final Color front = Color.LIGHT_GRAY;
-    private final Color back = new Color(248, 248, 248);
-    private final Color line = new Color(0, 153, 255);
-    private final Color fill = Color.DARK_GRAY;
+    public static final Color front = Color.LIGHT_GRAY;
+    public static final Color back = new Color(248, 248, 248);
+    public static final Color line = new Color(0, 153, 255);
+    public static final Color fill = Color.DARK_GRAY;
+
+    private List<JButton> buttonValues = new ArrayList<>(5);
 
     //private char[] copy;// = new char[18];
     //private Point start;
@@ -92,10 +96,10 @@ public class Window extends javax.swing.JFrame {
         lblCount = new javax.swing.JLabel();
         lblValueSelected = new javax.swing.JLabel();
         btnEmptyLinCol = new javax.swing.JToggleButton();
-        jTabbedPane1 = new javax.swing.JTabbedPane();
+        tabValues = new javax.swing.JTabbedPane();
         pnDefault = new javax.swing.JPanel();
-        btn1 = new javax.swing.JButton();
         btnFill = new javax.swing.JToggleButton();
+        btnAddTab = new javax.swing.JButton();
         jPanel4 = new javax.swing.JPanel();
         lblPosition = new javax.swing.JLabel();
         btnCode = new javax.swing.JButton();
@@ -110,7 +114,7 @@ public class Window extends javax.swing.JFrame {
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 765, Short.MAX_VALUE)
+            .addGap(0, 840, Short.MAX_VALUE)
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -180,20 +184,22 @@ public class Window extends javax.swing.JFrame {
         btnEmptyLinCol.setText("#");
 
         pnDefault.setBackground(new java.awt.Color(204, 204, 204));
-        pnDefault.setLayout(new java.awt.GridLayout(5, 5));
-
-        btn1.setText("+");
-        pnDefault.add(btn1);
-
-        jTabbedPane1.addTab("Default", pnDefault);
+        pnDefault.setLayout(new java.awt.GridLayout(2, 3));
+        tabValues.addTab("Default", pnDefault);
 
         btnFill.setText("Fill");
+
+        btnAddTab.setText("+");
+        btnAddTab.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnAddTabActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
         jPanel3Layout.setHorizontalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jTabbedPane1)
             .addGroup(jPanel3Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -209,7 +215,7 @@ public class Window extends javax.swing.JFrame {
                         .addComponent(btnFillLine)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(btnFillColumn)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 66, Short.MAX_VALUE)
                         .addComponent(btnEmptyLinCol))
                     .addGroup(jPanel3Layout.createSequentialGroup()
                         .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
@@ -224,6 +230,10 @@ public class Window extends javax.swing.JFrame {
                             .addComponent(tfGridHei)
                             .addComponent(btnRemove, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
                 .addContainerGap())
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
+                .addGap(0, 0, Short.MAX_VALUE)
+                .addComponent(btnAddTab))
+            .addComponent(tabValues, javax.swing.GroupLayout.Alignment.TRAILING)
         );
 
         jPanel3Layout.linkSize(javax.swing.SwingConstants.HORIZONTAL, new java.awt.Component[] {btnAdd, btnLeft, btnRemove, btnRigth});
@@ -233,8 +243,9 @@ public class Window extends javax.swing.JFrame {
         jPanel3Layout.setVerticalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jTabbedPane1)
+                .addComponent(btnAddTab)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(tabValues, javax.swing.GroupLayout.DEFAULT_SIZE, 210, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(lblValueSelected)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -368,10 +379,54 @@ public class Window extends javax.swing.JFrame {
         viewCode();
     }//GEN-LAST:event_btnCodeActionPerformed
 
-    private List<JButton> buttonValues = new ArrayList<>(5);
 
     private void miNewGridActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_miNewGridActionPerformed
 
+        addNewGrid();
+
+    }//GEN-LAST:event_miNewGridActionPerformed
+
+    private void btnAddTabActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddTabActionPerformed
+
+        addTilesGrid();
+
+    }//GEN-LAST:event_btnAddTabActionPerformed
+
+    private void addTilesGrid() {
+        TilerMapJDialog dialog = new TilerMapJDialog(this, true);
+        dialog.setLocationRelativeTo(this);
+        dialog.setVisible(true);
+
+        if (!dialog.isOk()) {
+            return;
+        }
+
+        JPanel newPanel = new JPanel();
+        newPanel.setLayout(new GridLayout(10, 5));
+
+        for (JButton b : dialog.getList()) {
+            b.removeActionListener(b.getActionListeners()[0]);
+
+            b.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent evt) {
+                    selectValue((JButton) evt.getSource());
+                }
+            });
+
+            newPanel.add(b);
+            buttonValues.add(b);
+        }
+
+        /*for (JButton b : buttonValues) {
+         newPanel.add(b);
+         }*/
+        tabValues.addTab("Tile", newPanel);
+
+        super.pack();
+    }
+
+    private void addNewGrid() {
         NewGridJDialog dialog = new NewGridJDialog(this, true);
         dialog.setLocationRelativeTo(this);
         dialog.setVisible(true);
@@ -380,12 +435,14 @@ public class Window extends javax.swing.JFrame {
             return;
         }
 
+        //clean
         for (JButton b : buttonValues) {
             pnDefault.remove(b);
         }
         list.clear();
         buttonValues.clear();
 
+        //update variables
         grid.width = dialog.getGridWidth();
         grid.height = dialog.getGridHeight();
         tfGridWid.setText(String.valueOf(dialog.getGridWidth()));
@@ -395,13 +452,14 @@ public class Window extends javax.swing.JFrame {
         valSel = defVal;
         list.add(newGrid(grid, defVal));
 
+        //add buttons
         JButton btn;
 
         btn = new JButton(dialog.getDefaultValue());
         btn.addActionListener(new java.awt.event.ActionListener() {
             @Override
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                selectValue(((JButton) evt.getSource()).getText());
+                selectValue((JButton) evt.getSource());
             }
         });
 
@@ -412,21 +470,26 @@ public class Window extends javax.swing.JFrame {
             btn.addActionListener(new java.awt.event.ActionListener() {
                 @Override
                 public void actionPerformed(java.awt.event.ActionEvent evt) {
-                    selectValue(((JButton) evt.getSource()).getText());
+                    selectValue((JButton) evt.getSource());
                 }
             });
 
             buttonValues.add(btn);
         }
 
+        int cols = dialog.getValues().length / 5;
+        pnDefault.setLayout(new GridLayout(cols, 5));
+
         for (JButton b : buttonValues) {
             pnDefault.add(b);
         }
+    }
 
-    }//GEN-LAST:event_miNewGridActionPerformed
-
-    private void selectValue(String val) {
+    private void selectValue(JButton btn) {
+        String val = (btn.getText() == null || btn.getText().isEmpty()) ? btn.getName() : btn.getText();
         valSel = val;
+        System.err.println("val " + val);
+        selected = btn;
         lblValueSelected.setText(String.format("Value selected: %s", val));
     }
 
@@ -628,8 +691,8 @@ public class Window extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton btn1;
     private javax.swing.JButton btnAdd;
+    private javax.swing.JButton btnAddTab;
     private javax.swing.JButton btnCode;
     private javax.swing.JToggleButton btnEmptyLinCol;
     private javax.swing.JToggleButton btnFill;
@@ -646,13 +709,13 @@ public class Window extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanel4;
-    private javax.swing.JTabbedPane jTabbedPane1;
     private javax.swing.JLabel lblCount;
     private javax.swing.JLabel lblIdx;
     private javax.swing.JLabel lblPosition;
     private javax.swing.JLabel lblValueSelected;
     private javax.swing.JMenuItem miNewGrid;
     private javax.swing.JPanel pnDefault;
+    private javax.swing.JTabbedPane tabValues;
     private javax.swing.JTextField tfGridHei;
     private javax.swing.JTextField tfGridWid;
     // End of variables declaration//GEN-END:variables

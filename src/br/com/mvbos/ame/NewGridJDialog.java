@@ -44,7 +44,6 @@ public class NewGridJDialog extends javax.swing.JDialog {
     public NewGridJDialog(Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
-        setTitle("New Grid");
     }
 
     /**
@@ -67,6 +66,7 @@ public class NewGridJDialog extends javax.swing.JDialog {
         tfDefaultValue = new javax.swing.JTextField();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        setTitle("New Grid");
 
         jLabel1.setText("Grid:");
 
@@ -153,7 +153,11 @@ public class NewGridJDialog extends javax.swing.JDialog {
             gridHeight = Integer.parseInt(tfColumns.getText());
 
             defaultValue = tfDefaultValue.getText();
-            values = tfValues.getText().split(";");
+            if (tfValues.getText().isEmpty()) {
+                values = new String[0];
+            } else {
+                values = tfValues.getText().split(";");
+            }
 
             ok = true;
             this.dispose();
