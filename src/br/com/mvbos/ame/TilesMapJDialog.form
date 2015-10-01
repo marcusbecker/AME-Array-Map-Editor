@@ -87,7 +87,7 @@
   <SubComponents>
     <Component class="javax.swing.JTextField" name="tfFile">
       <Properties>
-        <Property name="text" type="java.lang.String" value="C:\u005cUsers\u005cMarcus Becker\u005cDocuments\u005cGitHub\u005clogica-jogo\u005cbook\u005cresources\u005ccap07\u005ctiles_cenario.png" containsInvalidXMLChars="true"/>
+        <Property name="text" type="java.lang.String" value="C:\u005cUsers\u005cMarcus Becker\u005cDocuments\u005cLgJ Fontes\u005cCap07\u005cimagens\u005ctiles_cenario.png" containsInvalidXMLChars="true"/>
       </Properties>
     </Component>
     <Component class="javax.swing.JButton" name="btnFC">
@@ -168,6 +168,9 @@
       </Layout>
     </Container>
     <Container class="javax.swing.JScrollPane" name="jScrollPane1">
+      <Properties>
+        <Property name="autoscrolls" type="boolean" value="true"/>
+      </Properties>
       <AuxValues>
         <AuxValue name="autoScrollPane" type="java.lang.Boolean" value="true"/>
       </AuxValues>

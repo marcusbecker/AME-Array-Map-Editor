@@ -44,6 +44,9 @@ public class NewGridJDialog extends javax.swing.JDialog {
     public NewGridJDialog(Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
+
+        tfName.selectAll();
+        tfName.requestFocus();
     }
 
     /**
@@ -64,6 +67,8 @@ public class NewGridJDialog extends javax.swing.JDialog {
         btnOK = new javax.swing.JButton();
         jLabel4 = new javax.swing.JLabel();
         tfDefaultValue = new javax.swing.JTextField();
+        jLabel5 = new javax.swing.JLabel();
+        tfName = new javax.swing.JTextField();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("New Grid");
@@ -71,12 +76,14 @@ public class NewGridJDialog extends javax.swing.JDialog {
         jLabel1.setText("Grid:");
 
         tfLines.setText("18");
+        tfLines.setToolTipText("Lines");
 
         jLabel2.setText("x");
 
         tfColumns.setText("18");
+        tfColumns.setToolTipText("Columns");
 
-        jLabel3.setText("Values:");
+        jLabel3.setText("Initial values:");
 
         tfValues.setText("0;1;2");
 
@@ -91,6 +98,10 @@ public class NewGridJDialog extends javax.swing.JDialog {
 
         tfDefaultValue.setText(" ");
 
+        jLabel5.setText("Name");
+
+        tfName.setText("New grid");
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -103,6 +114,7 @@ public class NewGridJDialog extends javax.swing.JDialog {
                         .addComponent(btnOK))
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                            .addComponent(jLabel5, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(jLabel4, javax.swing.GroupLayout.DEFAULT_SIZE, 110, Short.MAX_VALUE)
                             .addComponent(jLabel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
@@ -118,13 +130,18 @@ public class NewGridJDialog extends javax.swing.JDialog {
                                         .addComponent(jLabel2)
                                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                         .addComponent(tfColumns, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                                .addGap(0, 172, Short.MAX_VALUE)))))
+                                .addGap(0, 172, Short.MAX_VALUE))
+                            .addComponent(tfName))))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel5)
+                    .addComponent(tfName, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel1)
                     .addComponent(tfLines, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -174,9 +191,15 @@ public class NewGridJDialog extends javax.swing.JDialog {
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
+    private javax.swing.JLabel jLabel5;
     private javax.swing.JTextField tfColumns;
     private javax.swing.JTextField tfDefaultValue;
     private javax.swing.JTextField tfLines;
+    private javax.swing.JTextField tfName;
     private javax.swing.JTextField tfValues;
     // End of variables declaration//GEN-END:variables
+
+    public String getProjectName() {
+        return tfName.getText();
+    }
 }

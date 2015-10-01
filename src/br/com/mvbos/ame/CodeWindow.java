@@ -5,6 +5,7 @@
  */
 package br.com.mvbos.ame;
 
+import br.com.mvbos.ame.util.GridValue;
 import java.util.List;
 
 /**
@@ -76,7 +77,7 @@ public class CodeWindow extends javax.swing.JFrame {
     private javax.swing.JTextArea text;
     // End of variables declaration//GEN-END:variables
 
-    private List<String[][]> lst;
+    private List<GridValue[][]> lst;
     private final StringBuilder sb = new StringBuilder();
 
     private String getArrayType() {
@@ -105,12 +106,12 @@ public class CodeWindow extends javax.swing.JFrame {
         }
     }
 
-    public void setList(List<String[][]> list) {
+    public void setList(List<GridValue[][]> list) {
         this.lst = list;
         sb.append("public static ").append(getArrayType()).append("[][][] arr = {\n");
 
         for (int index = 0; index < list.size(); index++) {
-            Object[][] arr = list.get(index);
+            GridValue[][] arr = list.get(index);
 
             sb.append("{\n");
 
@@ -119,9 +120,13 @@ public class CodeWindow extends javax.swing.JFrame {
                 sb.append("\t{");
 
                 for (int lin = 0; lin < arr[col].length; lin++) {
-                    Object val = arr[lin][col];
+                    GridValue val = arr[lin][col];
 
-                    sb.append(getArrayDelimiter()).append(val).append(getArrayDelimiter());
+                    sb.append(getArrayDelimiter());
+
+                    sb.append(val.getPlain());
+
+                    sb.append(getArrayDelimiter());
 
                     if (lin < arr[col].length - 1) {
                         sb.append(", ");

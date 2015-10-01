@@ -21,7 +21,6 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 import javax.swing.AbstractListModel;
-import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFileChooser;
@@ -33,7 +32,7 @@ import javax.swing.filechooser.FileFilter;
  *
  * @author Marcus Becker
  */
-public class TilerMapJDialog extends javax.swing.JDialog {
+public class TilesMapJDialog extends javax.swing.JDialog {
 
     private JButton selected;
     private ImageIcon image;
@@ -43,10 +42,12 @@ public class TilerMapJDialog extends javax.swing.JDialog {
     private final Point grid = new Point(10, 10);
     private final AbstractListModel listModel;
 
+    private boolean ok;
+
     /**
      * Creates new form TilerMapJDialog
      */
-    public TilerMapJDialog(Frame parent, boolean modal) {
+    public TilesMapJDialog(Frame parent, boolean modal) {
         super(parent, modal);
 
         this.listModel = new AbstractListModel() {
@@ -75,8 +76,12 @@ public class TilerMapJDialog extends javax.swing.JDialog {
     }
 
     private void updateSelected() {
-        for (JButton b : buttons) {
+        int sel = 0;
+        for (int i = 0; i < buttons.size(); i++) {
+            JButton b = buttons.get(i);
+
             if (b.equals(selected)) {
+                sel = i;
                 b.setBackground(new Color(0, 102, 204));
                 //b.setBorder(BorderFactory.createLineBorder(new Color(0, 102, 204)));
             } else {
@@ -84,6 +89,8 @@ public class TilerMapJDialog extends javax.swing.JDialog {
                 //b.setBorder(BorderFactory.createEmptyBorder());
             }
         }
+
+        jListValues.setSelectedIndex(sel);
 
         tfBtnValue.setText(selected.getName());
     }
@@ -94,6 +101,7 @@ public class TilerMapJDialog extends javax.swing.JDialog {
         for (JButton b : buttons) {
             pnButtons.remove(b);
         }
+
         buttons.clear();
 
         grid.x = Integer.parseInt(tfColumns.getText());
@@ -133,7 +141,6 @@ public class TilerMapJDialog extends javax.swing.JDialog {
                     ImageIcon img = new ImageIcon(bi);
 
                     JButton btn = new JButton();
-                    btn.setText("");
                     btn.setName(String.format("%s%d", (char) (alpha + lin), col));
                     btn.setToolTipText(String.format("Lin.: %d Col.: %d", lin + 1, col + 1));
                     btn.setIcon(img);
@@ -141,7 +148,6 @@ public class TilerMapJDialog extends javax.swing.JDialog {
                     btn.addActionListener(new ActionListener() {
                         @Override
                         public void actionPerformed(ActionEvent e) {
-                            System.out.println("0 " + selected);
                             selected = (JButton) e.getSource();
                             updateSelected();
                         }
@@ -267,7 +273,7 @@ public class TilerMapJDialog extends javax.swing.JDialog {
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Tiles map");
 
-        tfFile.setText("C:\\Users\\Marcus Becker\\Documents\\GitHub\\logica-jogo\\book\\resources\\cap07\\tiles_cenario.png");
+        tfFile.setText("C:\\Users\\Marcus Becker\\Documents\\LgJ Fontes\\Cap07\\imagens\\tiles_cenario.png");
 
         btnFC.setText("Image...");
         btnFC.addActionListener(new java.awt.event.ActionListener() {
@@ -313,6 +319,8 @@ public class TilerMapJDialog extends javax.swing.JDialog {
         slZoom.setValue(1);
 
         pnButtons.setLayout(new java.awt.GridLayout(5, 10));
+
+        jScrollPane1.setAutoscrolls(true);
 
         jListValues.setModel(listModel);
         jListValues.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
@@ -455,6 +463,7 @@ public class TilerMapJDialog extends javax.swing.JDialog {
 
     private void btnSaveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSaveActionPerformed
 
+        ok = !buttons.isEmpty();
         dispose();
 
     }//GEN-LAST:event_btnSaveActionPerformed
@@ -490,20 +499,21 @@ public class TilerMapJDialog extends javax.swing.JDialog {
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(TilerMapJDialog.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(TilesMapJDialog.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(TilerMapJDialog.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(TilesMapJDialog.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(TilerMapJDialog.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(TilesMapJDialog.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(TilerMapJDialog.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(TilesMapJDialog.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
+        //</editor-fold>
         //</editor-fold>
 
         /* Create and display the dialog */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                TilerMapJDialog dialog = new TilerMapJDialog(new javax.swing.JFrame(), true);
+                TilesMapJDialog dialog = new TilesMapJDialog(new javax.swing.JFrame(), true);
                 dialog.addWindowListener(new java.awt.event.WindowAdapter() {
                     @Override
                     public void windowClosing(java.awt.event.WindowEvent e) {
@@ -535,7 +545,7 @@ public class TilerMapJDialog extends javax.swing.JDialog {
     // End of variables declaration//GEN-END:variables
 
     public boolean isOk() {
-        return true;
+        return ok;
     }
 
     public List<JButton> getList() {

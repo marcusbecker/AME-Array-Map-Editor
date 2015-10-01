@@ -33,6 +33,7 @@
                   </Group>
                   <Group type="102" alignment="0" attributes="0">
                       <Group type="103" groupAlignment="1" max="-2" attributes="0">
+                          <Component id="jLabel5" alignment="0" max="32767" attributes="0"/>
                           <Component id="jLabel4" pref="110" max="32767" attributes="0"/>
                           <Component id="jLabel3" max="32767" attributes="0"/>
                           <Component id="jLabel1" max="32767" attributes="0"/>
@@ -40,7 +41,7 @@
                       <EmptySpace max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="0" attributes="0">
                           <Component id="tfValues" max="32767" attributes="0"/>
-                          <Group type="102" alignment="0" attributes="0">
+                          <Group type="102" attributes="0">
                               <Group type="103" groupAlignment="1" max="-2" attributes="0">
                                   <Component id="tfDefaultValue" alignment="0" max="32767" attributes="0"/>
                                   <Group type="102" attributes="0">
@@ -53,6 +54,7 @@
                               </Group>
                               <EmptySpace min="0" pref="172" max="32767" attributes="0"/>
                           </Group>
+                          <Component id="tfName" max="32767" attributes="0"/>
                       </Group>
                   </Group>
               </Group>
@@ -63,6 +65,11 @@
     <DimensionLayout dim="1">
       <Group type="103" groupAlignment="0" attributes="0">
           <Group type="102" alignment="0" attributes="0">
+              <EmptySpace max="-2" attributes="0"/>
+              <Group type="103" groupAlignment="3" attributes="0">
+                  <Component id="jLabel5" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="tfName" alignment="3" min="-2" max="-2" attributes="0"/>
+              </Group>
               <EmptySpace max="-2" attributes="0"/>
               <Group type="103" groupAlignment="3" attributes="0">
                   <Component id="jLabel1" alignment="3" min="-2" max="-2" attributes="0"/>
@@ -96,6 +103,7 @@
     <Component class="javax.swing.JTextField" name="tfLines">
       <Properties>
         <Property name="text" type="java.lang.String" value="18"/>
+        <Property name="toolTipText" type="java.lang.String" value="Lines"/>
       </Properties>
     </Component>
     <Component class="javax.swing.JLabel" name="jLabel2">
@@ -106,11 +114,12 @@
     <Component class="javax.swing.JTextField" name="tfColumns">
       <Properties>
         <Property name="text" type="java.lang.String" value="18"/>
+        <Property name="toolTipText" type="java.lang.String" value="Columns"/>
       </Properties>
     </Component>
     <Component class="javax.swing.JLabel" name="jLabel3">
       <Properties>
-        <Property name="text" type="java.lang.String" value="Values:"/>
+        <Property name="text" type="java.lang.String" value="Initial values:"/>
       </Properties>
     </Component>
     <Component class="javax.swing.JTextField" name="tfValues">
@@ -134,6 +143,16 @@
     <Component class="javax.swing.JTextField" name="tfDefaultValue">
       <Properties>
         <Property name="text" type="java.lang.String" value=" "/>
+      </Properties>
+    </Component>
+    <Component class="javax.swing.JLabel" name="jLabel5">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="Name"/>
+      </Properties>
+    </Component>
+    <Component class="javax.swing.JTextField" name="tfName">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="New grid"/>
       </Properties>
     </Component>
   </SubComponents>
