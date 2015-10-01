@@ -5,6 +5,7 @@
  */
 package br.com.mvbos.ame;
 
+import br.com.mvbos.ame.util.GridValue;
 import java.awt.Color;
 import java.awt.Frame;
 import java.awt.Graphics;
@@ -37,6 +38,7 @@ public class TilesMapJDialog extends javax.swing.JDialog {
     private JButton selected;
     private ImageIcon image;
     private final Timer timer;
+    private List<GridValue> values;
     private final List<JButton> buttons = new ArrayList<>(10);
 
     private final Point grid = new Point(10, 10);
@@ -73,6 +75,14 @@ public class TilesMapJDialog extends javax.swing.JDialog {
         });
 
         timer.start();
+    }
+
+    public boolean isOk() {
+        return ok;
+    }
+
+    public List<GridValue> getList() {
+        return values;
     }
 
     private void updateSelected() {
@@ -463,7 +473,19 @@ public class TilesMapJDialog extends javax.swing.JDialog {
 
     private void btnSaveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSaveActionPerformed
 
-        ok = !buttons.isEmpty();
+        if (buttons.isEmpty()) {
+            ok = false;
+            return;
+        }
+
+        values = new ArrayList<>(buttons.size());
+
+        for (JButton btn : buttons) {
+            GridValue gv = new GridValue(1, btn.getName(), (ImageIcon) btn.getIcon());
+            values.add(gv);
+        }
+
+        ok = true;
         dispose();
 
     }//GEN-LAST:event_btnSaveActionPerformed
@@ -544,11 +566,4 @@ public class TilesMapJDialog extends javax.swing.JDialog {
     private javax.swing.JTextField tfLines;
     // End of variables declaration//GEN-END:variables
 
-    public boolean isOk() {
-        return ok;
-    }
-
-    public List<JButton> getList() {
-        return buttons;
-    }
 }

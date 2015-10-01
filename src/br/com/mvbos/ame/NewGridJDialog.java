@@ -5,7 +5,11 @@
  */
 package br.com.mvbos.ame;
 
+import br.com.mvbos.ame.util.GridValue;
 import java.awt.Frame;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 /**
  *
@@ -14,8 +18,8 @@ import java.awt.Frame;
 public class NewGridJDialog extends javax.swing.JDialog {
 
     private int gridWidth, gridHeight;
-    private String[] values;
-    private String defaultValue;
+    private List<GridValue> values;
+    private GridValue defaultValue;
     private boolean ok;
 
     public boolean isOk() {
@@ -30,11 +34,11 @@ public class NewGridJDialog extends javax.swing.JDialog {
         return gridHeight;
     }
 
-    public String[] getValues() {
+    public List<GridValue> getValues() {
         return values;
     }
 
-    public String getDefaultValue() {
+    public GridValue getDefaultValue() {
         return defaultValue;
     }
 
@@ -169,17 +173,22 @@ public class NewGridJDialog extends javax.swing.JDialog {
             gridWidth = Integer.parseInt(tfLines.getText());
             gridHeight = Integer.parseInt(tfColumns.getText());
 
-            defaultValue = tfDefaultValue.getText();
+            defaultValue = new GridValue(-1, tfDefaultValue.getText(), null);
             if (tfValues.getText().isEmpty()) {
-                values = new String[0];
+                values = Collections.emptyList();
             } else {
-                values = tfValues.getText().split(";");
+                String[] arr = tfValues.getText().split(";");
+                values = new ArrayList<>(arr.length);
+
+                for (String s : arr) {
+                    values.add(new GridValue(s.hashCode(), s, null));
+                }
             }
 
             ok = true;
             this.dispose();
-        } catch (Exception e) {
 
+        } catch (Exception e) {
         }
 
     }//GEN-LAST:event_btnOKActionPerformed

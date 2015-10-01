@@ -5,6 +5,7 @@
  */
 package br.com.mvbos.ame;
 
+import br.com.mvbos.ame.util.GridValue;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Frame;
@@ -12,9 +13,11 @@ import java.awt.event.FocusAdapter;
 import java.awt.event.FocusEvent;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashMap;
+import java.util.Collections;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import javax.swing.AbstractListModel;
 import javax.swing.JTextField;
 
@@ -25,7 +28,9 @@ import javax.swing.JTextField;
 public class ColorsMapJDialog extends javax.swing.JDialog {
 
     //private Color lastColor = Color.WHITE;
-    private Map<String, Color> map = new HashMap<>(10);
+    private Map<String, Color> map =  new LinkedHashMap<>(20); //new HashMap<>(10);
+
+    private List<GridValue> gridValues = Collections.emptyList();
 
     private final AbstractListModel model;
     private List<String> values = new ArrayList<>(10);
@@ -345,51 +350,25 @@ public class ColorsMapJDialog extends javax.swing.JDialog {
     }//GEN-LAST:event_btnRemoveActionPerformed
 
     private void btnSaveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSaveActionPerformed
-        ok = !map.isEmpty();
+
+        if (map.isEmpty()) {
+            return;
+        }
+
+        Set<String> keys = map.keySet();
+        gridValues = new ArrayList<>(keys.size());
+
+        for (String key : keys) {
+            GridValue gv = new GridValue(1, key, null);
+            gv.setColor(map.get(key));
+            
+            gridValues.add(gv);
+        }
+
+        ok = true;
+
         this.dispose();
     }//GEN-LAST:event_btnSaveActionPerformed
-
-    /**
-     * @param args the command line arguments
-     */
-    public static void main(String args[]) {
-        /* Set the Nimbus look and feel */
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-         */
-        try {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                    break;
-                }
-            }
-        } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(ColorsMapJDialog.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(ColorsMapJDialog.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(ColorsMapJDialog.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(ColorsMapJDialog.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        }
-        //</editor-fold>
-
-        /* Create and display the dialog */
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                ColorsMapJDialog dialog = new ColorsMapJDialog(new javax.swing.JFrame(), true);
-                dialog.addWindowListener(new java.awt.event.WindowAdapter() {
-                    @Override
-                    public void windowClosing(java.awt.event.WindowEvent e) {
-                        System.exit(0);
-                    }
-                });
-                dialog.setVisible(true);
-            }
-        });
-    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAdd;
@@ -411,8 +390,9 @@ public class ColorsMapJDialog extends javax.swing.JDialog {
         return ok;
     }
 
-    public Map<String, Color> getList() {
-        return map;
+    public List<GridValue> getList() {
+
+        return gridValues;
     }
 
 }

@@ -23,6 +23,8 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -30,9 +32,11 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
+import javax.swing.JComponent;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JTabbedPane;
 import javax.swing.Timer;
 import javax.swing.filechooser.FileFilter;
 
@@ -45,13 +49,14 @@ public class Window extends javax.swing.JFrame {
     private final Timer timer;
 
     private final CodeWindow cw = new CodeWindow();
-    private final Dimension grid = new Dimension();
 
     private JButton selected;
     //private JButton selected;
 
+    public static final GridValue defaultValue = new GridValue(-1, "", null);
+
     private int index;
-    private final List<GridValue[][]> list = new ArrayList<>(10);
+    private final List<GridValue[][]> gridValuesList = new ArrayList<>(10);
 
     private Point size = new Point(810, 600);
 
@@ -62,9 +67,9 @@ public class Window extends javax.swing.JFrame {
     public static final Color line = new Color(0, 153, 255);
     public static final Color fill = Color.DARK_GRAY;
 
-    private final List<JButton> buttonValues = new ArrayList<>(20);
-    private String projectName;
+    private ProjectObject po = new ProjectObject();
 
+    //private final List<JButton> buttonValues = new ArrayList<>(20);
     //private char[] copy;// = new char[18];
     //private Point start;
     //private Point end;
@@ -74,7 +79,6 @@ public class Window extends javax.swing.JFrame {
     public Window() {
         initComponents();
 
-        //createCanvas();
         timer = new Timer(100, new ActionListener() {
 
             @Override
@@ -84,7 +88,6 @@ public class Window extends javax.swing.JFrame {
         });
 
         timer.start();
-
         updateLabels();
     }
 
@@ -124,8 +127,10 @@ public class Window extends javax.swing.JFrame {
         jMenuBar1 = new javax.swing.JMenuBar();
         jMenu1 = new javax.swing.JMenu();
         miNewGrid = new javax.swing.JMenuItem();
-        jMenuItem2 = new javax.swing.JMenuItem();
-        jMenuItem1 = new javax.swing.JMenuItem();
+        miOpen = new javax.swing.JMenuItem();
+        miSave = new javax.swing.JMenuItem();
+        sep = new javax.swing.JPopupMenu.Separator();
+        miExit = new javax.swing.JMenuItem();
         jMenu2 = new javax.swing.JMenu();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -204,7 +209,10 @@ public class Window extends javax.swing.JFrame {
         btnEmptyLinCol.setText("#");
         btnEmptyLinCol.setToolTipText("Clear");
 
+        tabValues.setTabLayoutPolicy(javax.swing.JTabbedPane.SCROLL_TAB_LAYOUT);
+
         pnDefault.setBackground(new java.awt.Color(204, 204, 204));
+        pnDefault.setName("pnDefault"); // NOI18N
         pnDefault.setLayout(new java.awt.GridLayout(2, 3));
         tabValues.addTab("Default", pnDefault);
 
@@ -348,23 +356,33 @@ public class Window extends javax.swing.JFrame {
         });
         jMenu1.add(miNewGrid);
 
-        jMenuItem2.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_O, java.awt.event.InputEvent.CTRL_MASK));
-        jMenuItem2.setText("Open");
-        jMenuItem2.addActionListener(new java.awt.event.ActionListener() {
+        miOpen.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_O, java.awt.event.InputEvent.CTRL_MASK));
+        miOpen.setText("Open");
+        miOpen.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jMenuItem2ActionPerformed(evt);
+                miOpenActionPerformed(evt);
             }
         });
-        jMenu1.add(jMenuItem2);
+        jMenu1.add(miOpen);
 
-        jMenuItem1.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_S, java.awt.event.InputEvent.CTRL_MASK));
-        jMenuItem1.setText("Save");
-        jMenuItem1.addActionListener(new java.awt.event.ActionListener() {
+        miSave.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_S, java.awt.event.InputEvent.CTRL_MASK));
+        miSave.setText("Save");
+        miSave.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jMenuItem1ActionPerformed(evt);
+                miSaveActionPerformed(evt);
             }
         });
-        jMenu1.add(jMenuItem1);
+        jMenu1.add(miSave);
+        jMenu1.add(sep);
+
+        miExit.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_W, java.awt.event.InputEvent.CTRL_MASK));
+        miExit.setText("Exit");
+        miExit.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                miExitActionPerformed(evt);
+            }
+        });
+        jMenu1.add(miExit);
 
         jMenuBar1.add(jMenu1);
 
@@ -406,7 +424,7 @@ public class Window extends javax.swing.JFrame {
 
     private void btnAddActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddActionPerformed
 
-        list.add(newGrid(grid, null));
+        gridValuesList.add(newGrid(po.getGrid()));
         index++;
 
         updateLabels();
@@ -414,19 +432,27 @@ public class Window extends javax.swing.JFrame {
     }//GEN-LAST:event_btnAddActionPerformed
 
     private void btnLeftActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLeftActionPerformed
+
         go(-1);
+
     }//GEN-LAST:event_btnLeftActionPerformed
 
     private void btnRigthActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRigthActionPerformed
+
         go(1);
+
     }//GEN-LAST:event_btnRigthActionPerformed
 
     private void btnRemoveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRemoveActionPerformed
+
         removeGrid();
+
     }//GEN-LAST:event_btnRemoveActionPerformed
 
     private void btnCodeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCodeActionPerformed
+
         viewCode();
+
     }//GEN-LAST:event_btnCodeActionPerformed
 
 
@@ -448,13 +474,13 @@ public class Window extends javax.swing.JFrame {
 
     }//GEN-LAST:event_btnAddColorsActionPerformed
 
-    private void jMenuItem1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem1ActionPerformed
+    private void miSaveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_miSaveActionPerformed
 
         save();
 
-    }//GEN-LAST:event_jMenuItem1ActionPerformed
+    }//GEN-LAST:event_miSaveActionPerformed
 
-    private void jMenuItem2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem2ActionPerformed
+    private void miOpenActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_miOpenActionPerformed
 
         JFileChooser fc = new JFileChooser(Paths.get("").toAbsolutePath().toString());
         fc.setFileFilter(new FileFilter() {
@@ -474,12 +500,32 @@ public class Window extends javax.swing.JFrame {
             load(fc.getSelectedFile());
         }
 
-    }//GEN-LAST:event_jMenuItem2ActionPerformed
+    }//GEN-LAST:event_miOpenActionPerformed
+
+    private void miExitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_miExitActionPerformed
+
+        dispose();
+        System.exit(1);
+
+    }//GEN-LAST:event_miExitActionPerformed
 
     private JButton createButton(GridValue gv) {
         JButton btn;
 
-        btn = new JButton(gv.getPlain());
+        btn = new JButton();
+
+        if (gv.getImageIcon() != null) {
+            btn.setName(gv.getPlain());
+            btn.setIcon(gv.getImageIcon());
+            btn.setToolTipText(String.format("Value: %s", getText(btn)));
+        } else {
+            btn.setText(gv.getPlain());
+        }
+
+        if (gv.getColor() != null) {
+            btn.setBackground(gv.getColor());
+        }
+
         btn.addActionListener(new java.awt.event.ActionListener() {
             @Override
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -490,80 +536,93 @@ public class Window extends javax.swing.JFrame {
         return btn;
     }
 
+    private void setDefaultButton(GridValue gv) {
+        defaultValue.setPlain(gv.getPlain());
+        defaultValue.setColor(gv.getColor());
+        defaultValue.setImageIcon(gv.getImageIcon());
+    }
+
     private void load(File file) {
 
-        ProjectObject po = null;
+        ProjectObject temp = null;
 
         try (ObjectInputStream in = new ObjectInputStream(new FileInputStream(file))) {
-            po = (ProjectObject) in.readObject();
+            temp = (ProjectObject) in.readObject();
         } catch (Exception ex) {
             Logger.getLogger(Window.class.getName()).log(Level.SEVERE, null, ex);
         }
 
-        if (po == null) {
+        if (temp == null) {
             return;
         }
 
-        //clean
-        /*for (JButton b : buttonValues) {
-         pnDefault.remove(b);
-         }
+        configureNewProject(temp);
+        setDefaultButton(temp.getDefaultValue());
 
-         list.clear();
-         buttonValues.clear();*/
-        //update variables
-        projectName = po.getName();
-        grid.width = po.getGrid().width;
-        grid.height = po.getGrid().height;
-        tfGridWid.setText(String.valueOf(grid.width));
-        tfGridHei.setText(String.valueOf(grid.height));
+        JButton btn = createButton(defaultValue);
+        btn.setName("defaultButton");
+        pnDefault.add(btn);
 
-        //String defVal = dialog.getDefaultValue();
-        //valSel = defVal;
-        //list.add(newGrid(grid, defVal));
-        //add buttons
-        int cols = (po.getValues().size() + 1) / 5;
-        pnDefault.setLayout(new GridLayout(cols, 5));
+        Map<String, JPanel> tt = new LinkedHashMap<>(temp.getValues().size());
 
-        defaultValue.setPlain(po.getDefaultValue().getPlain());
-        defaultValue.setColor(po.getDefaultValue().getColor());
-        defaultValue.setImageIcon(po.getDefaultValue().getImageIcon());
+        //Map<String, GridValue> tt = new LinkedHashMap<>(temp.getValues().size());
+        for (GridValue gv : temp.getValues()) {
+            if (pnDefault.getName().equals(gv.getTabName()) || tt.containsKey(gv.getTabName())) {
+                continue;
+            }
 
-        for (GridValue gv : po.getValues()) {
-            JButton b = createButton(gv);
-            buttonValues.add(b);
-            pnDefault.add(b);
+            JPanel pn = new JPanel();
+            tt.put(gv.getTabName(), pn);
+
+            tabValues.add(gv.getTabName(), pn);
         }
 
-        list.addAll(po.getGrids());
+        //
+        addPlainValues(temp.getValues());
+
+        gridValuesList.addAll(temp.getGrids());
+
+        temp.getValues().clear();
+        temp.getGrids().clear();
+
     }
 
     private void save() {
-        ProjectObject po = new ProjectObject();
-        po.setName(projectName);
-        po.setGrid(grid);
         po.setDefaultValue(defaultValue);
-        po.setGrids(list);
+        po.setGrids(gridValuesList);
 
-        for (Component tabs : tabValues.getComponents()) {
-            if (tabs instanceof JPanel) {
-                JPanel tab = (JPanel) tabs;
-                for (Component btn : tab.getComponents()) {
-                    if (!(btn instanceof JButton)) {
-                        continue;
-                    }
+        for (JPanel tab : getPanels(tabValues)) {
+            for (JButton btn : getButtons(tab)) {
 
-                    GridValue gv = createNewValue((JButton) btn);
-                    gv.setTabName(tab.getName());
-                    po.getValues().add(gv);
+                if ("defaultButton".equals(btn.getName())) {
+                    continue;
                 }
+
+                GridValue gv = createNewValue((JButton) btn);
+                gv.setTabName(tab.getName());
+                po.getValues().add(gv);
             }
         }
 
-        try (ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream(projectName + ".ame"))) {
+        try (ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream(po.getName() + ".ame"))) {
             out.writeObject(po);
         } catch (IOException ex) {
             Logger.getLogger(Window.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+    }
+
+    public enum TabNames {
+
+        DEFAULT("Default"), TILES("Tiles"), COLORS("Colors");
+        private final String name;
+
+        private TabNames(String name) {
+            this.name = name;
+        }
+
+        public String getName() {
+            return name;
         }
 
     }
@@ -577,29 +636,19 @@ public class Window extends javax.swing.JFrame {
             return;
         }
 
-        Map<String, Color> map = dialog.getList();
-        Set<String> keys = map.keySet();
+        int listSize = dialog.getList().size();
 
         JPanel newPanel = new JPanel();
-        newPanel.setLayout(new GridLayout(keys.size() / 5, keys.size() / 10));
+        newPanel.setName(TabNames.COLORS.getName());
+        newPanel.setLayout(new GridLayout(listSize / 5, listSize / 10));
 
-        for (String key : keys) {
-            JButton b = new JButton(key);
-
-            b.setBackground(map.get(key));
-            b.setToolTipText(String.format("Value: %s", key));
-            b.addActionListener(new ActionListener() {
-                @Override
-                public void actionPerformed(ActionEvent evt) {
-                    selectValue((JButton) evt.getSource());
-                }
-            });
-
+        for (GridValue gv : dialog.getList()) {
+            JButton b = createButton(gv);
+            b.setName("color");
             newPanel.add(b);
-            buttonValues.add(b);
         }
 
-        tabValues.addTab("Colors", newPanel);
+        tabValues.addTab(newPanel.getName(), newPanel);
         tabValues.setSelectedIndex(tabValues.getTabCount() - 1);
 
         super.pack();
@@ -617,31 +666,42 @@ public class Window extends javax.swing.JFrame {
         int listSize = dialog.getList().size();
 
         JPanel newPanel = new JPanel();
+        newPanel.setName(TabNames.TILES.getName());
         newPanel.setLayout(new GridLayout(listSize / 5, listSize / 10));
 
-        for (JButton b : dialog.getList()) {
-            //Remove actions added on dialog
-            b.removeActionListener(b.getActionListeners()[0]);
-
-            b.setToolTipText(String.format("Value: %s", getText(b)));
-            b.addActionListener(new ActionListener() {
-                @Override
-                public void actionPerformed(ActionEvent evt) {
-                    selectValue((JButton) evt.getSource());
-                }
-            });
-
+        for (GridValue gv : dialog.getList()) {
+            JButton b = createButton(gv);
+            b.setName("tile");
             newPanel.add(b);
-            buttonValues.add(b);
         }
 
         /*for (JButton b : buttonValues) {
          newPanel.add(b);
          }*/
-        tabValues.addTab("Tiles", newPanel);
+        tabValues.addTab(newPanel.getName(), newPanel);
         tabValues.setSelectedIndex(tabValues.getTabCount() - 1);
 
         super.pack();
+    }
+
+    private void configureNewProject(ProjectObject po) {
+        //clean
+        for (JPanel tabs : getPanels(tabValues)) {
+            //Remove buttons
+            tabs.removeAll();
+
+            if (!pnDefault.getName().equals(tabs.getName())) {
+                tabValues.remove(tabs);
+            }
+        }
+
+        //clean grid
+        gridValuesList.clear();
+
+        //update variables
+        this.po = po;
+        tfGridWid.setText(String.valueOf(po.getGrid().width));
+        tfGridHei.setText(String.valueOf(po.getGrid().height));
     }
 
     private void addNewGrid() {
@@ -653,56 +713,41 @@ public class Window extends javax.swing.JFrame {
             return;
         }
 
-        //clean
-        for (JButton b : buttonValues) {
-            pnDefault.remove(b);
+        ProjectObject temp = new ProjectObject();
+        temp.setName(dialog.getProjectName());
+        temp.setDefaultValue(dialog.getDefaultValue());
+        temp.setGrid(new Dimension(dialog.getGridWidth(), dialog.getGridHeight()));
+
+        setDefaultButton(dialog.getDefaultValue());
+        configureNewProject(temp);
+
+        //Create grid with default value for all fields
+        gridValuesList.add(newGrid(po.getGrid()));
+
+        JButton btn = createButton(defaultValue);
+        btn.setName("defaultButton");
+        pnDefault.add(btn);
+
+        addPlainValues(dialog.getValues());
+    }
+
+    private void addPlainValues(List<GridValue> values) {
+        int col = (values.size() + 1) / 2;
+        int row = values.size() / 2;
+
+        if (col == 0) {
+            col = 1;
         }
 
-        list.clear();
-        buttonValues.clear();
-
-        //update variables
-        projectName = dialog.getProjectName();
-        grid.width = dialog.getGridWidth();
-        grid.height = dialog.getGridHeight();
-        tfGridWid.setText(String.valueOf(dialog.getGridWidth()));
-        tfGridHei.setText(String.valueOf(dialog.getGridHeight()));
-
-        String defVal = dialog.getDefaultValue();
-        //valSel = defVal;
-        list.add(newGrid(grid, defVal));
+        pnDefault.setLayout(new GridLayout(col, row));
 
         //add buttons
-        JButton btn;
-
-        btn = new JButton(dialog.getDefaultValue());
-        btn.addActionListener(new java.awt.event.ActionListener() {
-            @Override
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                selectValue((JButton) evt.getSource());
-            }
-        });
-
-        buttonValues.add(btn);
-
-        for (String v : dialog.getValues()) {
-            btn = new JButton(v);
-            btn.addActionListener(new java.awt.event.ActionListener() {
-                @Override
-                public void actionPerformed(java.awt.event.ActionEvent evt) {
-                    selectValue((JButton) evt.getSource());
-                }
-            });
-
-            buttonValues.add(btn);
+        for (GridValue g : values) {
+            pnDefault.add(createButton(g));
         }
 
-        int cols = (dialog.getValues().length + 1) / 5;
-        pnDefault.setLayout(new GridLayout(cols, 5));
+        pnDefault.updateUI();
 
-        for (JButton b : buttonValues) {
-            pnDefault.add(b);
-        }
     }
 
     private String getText(JButton btn) {
@@ -715,21 +760,25 @@ public class Window extends javax.swing.JFrame {
 
     private void selectValue(JButton btn) {
         selected = btn;
-        //System.err.println("val " + val);
         lblValueSelected.setText(String.format("Value selected: %s", getText(btn)));
     }
 
     private JPanel createCanvas() {
+
         JPanel c = new JPanel() {
 
             @Override
             public void paint(Graphics g) {
-                if (list.isEmpty()) {
+                if (gridValuesList.isEmpty()) {
                     super.paint(g);
                     return;
                 }
 
-                size = new Point(getWidth(), getHeight());
+                Dimension grid = po.getGrid();
+
+                size.x = getWidth();
+                size.y = getHeight();
+
                 int x = size.x / grid.width;
                 int y = size.y / grid.height;
 
@@ -739,7 +788,7 @@ public class Window extends javax.swing.JFrame {
                 g.setColor(back);
                 g.fillRect(0, 0, getWidth(), getHeight());
 
-                GridValue[][] gridArray = list.get(index);
+                GridValue[][] gridArray = gridValuesList.get(index);
 
                 g.setColor(fill);
 
@@ -761,10 +810,10 @@ public class Window extends javax.swing.JFrame {
                                     g.drawImage(value.getImage(), col * x, lin * y, null);
 
                                 } else {
-                                    g.setColor(fill);
+                                    g.setColor(value.getColor() != null ? value.getColor() : fill);
                                     g.fillRect(col * x, lin * y, x, y);
-                                    g.setColor(back);
 
+                                    g.setColor(back);
                                     g.drawString(value.getPlain(), col * x + fSize, lin * y + fSize);
                                 }
 
@@ -773,7 +822,6 @@ public class Window extends javax.swing.JFrame {
                                  g.drawString("[]", col * x + x / 2, lin * y + y / 2);*/
                                 g.drawString(value.getPlain(), col * x + fSize, lin * y + fSize);
                             }
-
                         }
                     }
                 }
@@ -834,6 +882,11 @@ public class Window extends javax.swing.JFrame {
 
             @Override
             public void mouseClicked(MouseEvent e) {
+                if (selected == null) {
+                    return;
+                }
+
+                Dimension grid = po.getGrid();
                 int x = size.x / grid.width;
                 int y = size.y / grid.height;
 
@@ -841,7 +894,7 @@ public class Window extends javax.swing.JFrame {
                 int py = e.getPoint().y / y;
 
                 if (e.getButton() == MouseEvent.BUTTON1) {
-                    GridValue[][] gridArray = list.get(index);
+                    GridValue[][] gridArray = gridValuesList.get(index);
 
                     //System.out.printf("x %d y %d - px %d py %d\n", x, y, px, py);
                     if (!isValid(px, py, gridArray)) {
@@ -873,8 +926,7 @@ public class Window extends javax.swing.JFrame {
                          temp = new GridValue(0, getText(selected), getImage(selected);
                          }
                          gridArray[px][py] = temp;*/
-
-                        gridArray[px][py] = gridArray[px][py] == defaultValue ? createNewValue(selected) : defaultValue;
+                        gridArray[px][py] = defaultValue.equals(gridArray[px][py]) ? createNewValue(selected) : defaultValue;
 
                         //System.out.println("defVal " + defVal);
                         //System.out.println("valSel " + valSel);
@@ -926,11 +978,18 @@ public class Window extends javax.swing.JFrame {
 
     private GridValue createNewValue(JButton selected) {
         GridValue g = new GridValue(0, getText(selected), getImage(selected));
+
+        if ("color".equals(selected.getName())) {
+            g.setColor(selected.getBackground());
+        }
+
         return g;
     }
 
     private void updateMousePosition() {
-        if (grid.width == 0 || grid.height == 0) {
+        Dimension grid = po.getGrid();
+
+        if (grid == null || grid.width == 0 || grid.height == 0) {
             return;
         }
 
@@ -967,8 +1026,6 @@ public class Window extends javax.swing.JFrame {
     private javax.swing.JMenu jMenu1;
     private javax.swing.JMenu jMenu2;
     private javax.swing.JMenuBar jMenuBar1;
-    private javax.swing.JMenuItem jMenuItem1;
-    private javax.swing.JMenuItem jMenuItem2;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanel4;
@@ -976,8 +1033,12 @@ public class Window extends javax.swing.JFrame {
     private javax.swing.JLabel lblIdx;
     private javax.swing.JLabel lblPosition;
     private javax.swing.JLabel lblValueSelected;
+    private javax.swing.JMenuItem miExit;
     private javax.swing.JMenuItem miNewGrid;
+    private javax.swing.JMenuItem miOpen;
+    private javax.swing.JMenuItem miSave;
     private javax.swing.JPanel pnDefault;
+    private javax.swing.JPopupMenu.Separator sep;
     private javax.swing.JTabbedPane tabValues;
     private javax.swing.JTextField tfGridHei;
     private javax.swing.JTextField tfGridWid;
@@ -987,8 +1048,8 @@ public class Window extends javax.swing.JFrame {
         int t = index + id;
 
         if (t < 0) {
-            t = list.size() - 1;
-        } else if (t == list.size()) {
+            t = gridValuesList.size() - 1;
+        } else if (t == gridValuesList.size()) {
             t = 0;
         }
 
@@ -997,35 +1058,28 @@ public class Window extends javax.swing.JFrame {
     }
 
     private void updateLabels() {
-        lblCount.setText(String.valueOf(list.size()));
+        lblCount.setText(String.valueOf(gridValuesList.size()));
         lblIdx.setText(String.valueOf(index + 1));
     }
 
     private void removeGrid() {
         int res = JOptionPane.showConfirmDialog(this, String.format("Remove grid %d?", index + 1), "Remove Confirm", JOptionPane.YES_NO_OPTION);
         if (res == JOptionPane.OK_OPTION) {
-            if (list.size() > 1) {
-                list.remove(index);
+            if (gridValuesList.size() > 1) {
+                gridValuesList.remove(index);
                 go(-1);
             } else {
-                list.set(index, newGrid(grid, null));
+                gridValuesList.set(index, newGrid(po.getGrid()));
             }
         }
     }
 
     private void viewCode() {
-        cw.setList(list);
+        cw.setList(gridValuesList);
         cw.setVisible(true);
     }
 
-    public static final GridValue defaultValue = new GridValue(-1, "", null);
-
-    private GridValue[][] newGrid(Dimension grid, String initValue) {
-        if (initValue != null) {
-            defaultValue.setPlain(initValue);
-            defaultValue.setImageIcon(null);
-        }
-
+    private GridValue[][] newGrid(Dimension grid) {
         GridValue[][] arr = new GridValue[grid.width][grid.height];
 
         for (GridValue[] a : arr) {
@@ -1035,5 +1089,38 @@ public class Window extends javax.swing.JFrame {
         }
 
         return arr;
+    }
+
+    private Iterable<JTabbedPane> getTabs(JComponent comp) {
+        List<JTabbedPane> l = new ArrayList<>(comp.getComponentCount());
+        for (Component c : comp.getComponents()) {
+            if (c instanceof JTabbedPane) {
+                l.add((JTabbedPane) c);
+            }
+        }
+
+        return l;
+    }
+
+    private Iterable<JPanel> getPanels(JComponent comp) {
+        List<JPanel> l = new ArrayList<>(comp.getComponentCount());
+        for (Component c : comp.getComponents()) {
+            if (c instanceof JPanel) {
+                l.add((JPanel) c);
+            }
+        }
+
+        return l;
+    }
+
+    private Iterable<JButton> getButtons(JComponent comp) {
+        List<JButton> l = new ArrayList<>(comp.getComponentCount());
+        for (Component c : comp.getComponents()) {
+            if (c instanceof JButton) {
+                l.add((JButton) c);
+            }
+        }
+
+        return l;
     }
 }
