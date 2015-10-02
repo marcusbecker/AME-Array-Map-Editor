@@ -115,11 +115,11 @@ public class CodeWindow extends javax.swing.JFrame {
 
             sb.append("{\n");
 
-            for (int col = 0; col < arr.length; col++) {
+            for (int col = 0; col < arr[0].length; col++) {
 
                 sb.append("\t{");
 
-                for (int lin = 0; lin < arr[col].length; lin++) {
+                for (int lin = 0; lin < arr.length; lin++) {
                     GridValue val = arr[lin][col];
 
                     sb.append(getArrayDelimiter());
@@ -128,14 +128,14 @@ public class CodeWindow extends javax.swing.JFrame {
 
                     sb.append(getArrayDelimiter());
 
-                    if (lin < arr[col].length - 1) {
+                    if (lin < arr.length - 1) {
                         sb.append(", ");
                     } else {
                         sb.append(" ");
                     }
                 }
 
-                if (col < arr.length - 1) {
+                if (col < arr[0].length - 1) {
                     sb.append("},\n");
                 } else {
                     sb.append("}\n");

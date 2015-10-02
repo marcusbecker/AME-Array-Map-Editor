@@ -170,8 +170,8 @@ public class NewGridJDialog extends javax.swing.JDialog {
     private void btnOKActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnOKActionPerformed
 
         try {
-            gridWidth = Integer.parseInt(tfLines.getText());
-            gridHeight = Integer.parseInt(tfColumns.getText());
+            gridWidth = Integer.parseInt(tfColumns.getText());
+            gridHeight = Integer.parseInt(tfLines.getText());
 
             defaultValue = new GridValue(-1, tfDefaultValue.getText(), null);
             if (tfValues.getText().isEmpty()) {

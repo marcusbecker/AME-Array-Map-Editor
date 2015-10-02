@@ -23,11 +23,10 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.LinkedHashMap;
-import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.ImageIcon;
@@ -112,7 +111,6 @@ public class Window extends javax.swing.JFrame {
         btnAdd = new javax.swing.JButton();
         btnFillLine = new javax.swing.JToggleButton();
         btnFillColumn = new javax.swing.JToggleButton();
-        lblIdx = new javax.swing.JLabel();
         lblCount = new javax.swing.JLabel();
         lblValueSelected = new javax.swing.JLabel();
         btnEmptyLinCol = new javax.swing.JToggleButton();
@@ -121,6 +119,7 @@ public class Window extends javax.swing.JFrame {
         btnFill = new javax.swing.JToggleButton();
         btnAddTab = new javax.swing.JButton();
         btnAddColors = new javax.swing.JButton();
+        btnEditTab = new javax.swing.JButton();
         jPanel4 = new javax.swing.JPanel();
         lblPosition = new javax.swing.JLabel();
         btnCode = new javax.swing.JButton();
@@ -132,6 +131,8 @@ public class Window extends javax.swing.JFrame {
         sep = new javax.swing.JPopupMenu.Separator();
         miExit = new javax.swing.JMenuItem();
         jMenu2 = new javax.swing.JMenu();
+        miImport = new javax.swing.JMenuItem();
+        miSync = new javax.swing.JMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -198,13 +199,10 @@ public class Window extends javax.swing.JFrame {
 
         btnFillColumn.setText("|");
 
-        lblIdx.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        lblIdx.setText("100");
-
         lblCount.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         lblCount.setText("100");
 
-        lblValueSelected.setText("Value selected");
+        lblValueSelected.setText("Value sel:");
 
         btnEmptyLinCol.setText("#");
         btnEmptyLinCol.setToolTipText("Clear");
@@ -232,6 +230,9 @@ public class Window extends javax.swing.JFrame {
             }
         });
 
+        btnEditTab.setText("!");
+        btnEditTab.setToolTipText("Edit tab selected");
+
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
         jPanel3Layout.setHorizontalGroup(
@@ -240,13 +241,15 @@ public class Window extends javax.swing.JFrame {
                 .addContainerGap()
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(btnFill, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(lblValueSelected, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(jPanel3Layout.createSequentialGroup()
                         .addComponent(btnLeft)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(lblIdx, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(btnRigth)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(btnRigth))
+                        .addComponent(btnAdd, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(btnRemove, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addGap(0, 0, Short.MAX_VALUE))
                     .addGroup(jPanel3Layout.createSequentialGroup()
                         .addComponent(btnFillLine)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -254,17 +257,16 @@ public class Window extends javax.swing.JFrame {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 66, Short.MAX_VALUE)
                         .addComponent(btnEmptyLinCol))
                     .addGroup(jPanel3Layout.createSequentialGroup()
-                        .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                            .addComponent(tfGridWid)
-                            .addComponent(btnAdd, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addComponent(tfGridWid, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(lblCount, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(tfGridHei)
-                            .addComponent(btnRemove, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
+                        .addComponent(tfGridHei, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(jPanel3Layout.createSequentialGroup()
+                        .addComponent(lblValueSelected, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(btnEditTab))
+                    .addComponent(lblCount, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
                 .addGap(0, 0, Short.MAX_VALUE)
@@ -287,7 +289,9 @@ public class Window extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(tabValues, javax.swing.GroupLayout.DEFAULT_SIZE, 210, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(lblValueSelected)
+                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(lblValueSelected)
+                    .addComponent(btnEditTab))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(btnFill)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -299,12 +303,10 @@ public class Window extends javax.swing.JFrame {
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnLeft)
                     .addComponent(btnRigth)
-                    .addComponent(lblIdx))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnAdd)
-                    .addComponent(btnRemove)
-                    .addComponent(lblCount))
+                    .addComponent(btnRemove))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(lblCount)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(tfGridWid, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -387,6 +389,23 @@ public class Window extends javax.swing.JFrame {
         jMenuBar1.add(jMenu1);
 
         jMenu2.setText("Edit");
+
+        miImport.setText("Import CSV");
+        miImport.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                miImportActionPerformed(evt);
+            }
+        });
+        jMenu2.add(miImport);
+
+        miSync.setText("Syncronize");
+        miSync.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                miSyncActionPerformed(evt);
+            }
+        });
+        jMenu2.add(miSync);
+
         jMenuBar1.add(jMenu2);
 
         setJMenuBar(jMenuBar1);
@@ -497,7 +516,7 @@ public class Window extends javax.swing.JFrame {
         });
 
         if (fc.showOpenDialog(this) == JFileChooser.OPEN_DIALOG) {
-            load(fc.getSelectedFile());
+            open(fc.getSelectedFile());
         }
 
     }//GEN-LAST:event_miOpenActionPerformed
@@ -508,6 +527,60 @@ public class Window extends javax.swing.JFrame {
         System.exit(1);
 
     }//GEN-LAST:event_miExitActionPerformed
+
+    private void miImportActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_miImportActionPerformed
+
+        ImportCSVJDialog dialog = new ImportCSVJDialog(this, true);
+        dialog.setLocationRelativeTo(this);
+        dialog.setVisible(true);
+
+        if (!dialog.isOk()) {
+            return;
+        }
+
+        importGrid(dialog.getValues());
+
+    }//GEN-LAST:event_miImportActionPerformed
+
+    private void miSyncActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_miSyncActionPerformed
+
+        List<GridValue> values = listValues();
+
+        for (JPanel pn : getPanels(tabValues)) {
+            for (JButton btn : getButtons(pn)) {
+                for (GridValue gv : values) {
+
+                    //TODO melhorar comparacao
+                    if (gv.getPlain().equals(btn.getText())) {
+                        configureValue(gv, btn);
+                    }
+                }
+            }
+        }
+
+    }//GEN-LAST:event_miSyncActionPerformed
+
+    private void configureValue(GridValue gv, JButton btn) {
+        int id = generateId(btn);
+        gv.setId(id);
+        if (ButtonType.COLOR.name().equals(btn.getName())) {
+            gv.setColor(btn.getBackground());
+        } else if (btn.getIcon() != null) {
+            gv.setImageIcon((ImageIcon) btn.getIcon());
+        }
+    }
+
+    private List<GridValue> listValues() {
+        GridValue[][] arr = gridValuesList.get(index);
+
+        List<GridValue> lst = new ArrayList<>(arr.length * arr[0].length);
+
+        for (GridValue[] g : arr) {
+            lst.addAll(Arrays.asList(g));
+        }
+
+        return lst;
+    }
 
     private JButton createButton(GridValue gv) {
         JButton btn;
@@ -542,12 +615,13 @@ public class Window extends javax.swing.JFrame {
         defaultValue.setImageIcon(gv.getImageIcon());
     }
 
-    private void load(File file) {
+    private void open(File file) {
 
         ProjectObject temp = null;
 
         try (ObjectInputStream in = new ObjectInputStream(new FileInputStream(file))) {
             temp = (ProjectObject) in.readObject();
+
         } catch (Exception ex) {
             Logger.getLogger(Window.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -563,22 +637,31 @@ public class Window extends javax.swing.JFrame {
         btn.setName("defaultButton");
         pnDefault.add(btn);
 
-        Map<String, JPanel> tt = new LinkedHashMap<>(temp.getValues().size());
+        Map<String, List<GridValue>> tg = new LinkedHashMap<>(temp.getValues().size());
 
-        //Map<String, GridValue> tt = new LinkedHashMap<>(temp.getValues().size());
+        //Load tabs
         for (GridValue gv : temp.getValues()) {
-            if (pnDefault.getName().equals(gv.getTabName()) || tt.containsKey(gv.getTabName())) {
-                continue;
+            if (!tg.containsKey(gv.getTabName())) {
+                tg.put(gv.getTabName(), new ArrayList<GridValue>(20));
             }
 
-            JPanel pn = new JPanel();
-            tt.put(gv.getTabName(), pn);
-
-            tabValues.add(gv.getTabName(), pn);
+            tg.get(gv.getTabName()).add(gv);
         }
 
-        //
-        addPlainValues(temp.getValues());
+        for (String k : tg.keySet()) {
+            List<GridValue> gv = tg.get(k);
+
+            if (TabNames.COLORS.getName().equals(k)) {
+                add(gv, TabNames.COLORS, ButtonType.COLOR);
+
+            } else if (TabNames.TILES.getName().equals(k)) {
+                add(gv, TabNames.TILES, ButtonType.IMAGE);
+
+            } else {
+                addPlainValues(gv);
+            }
+
+        }
 
         gridValuesList.addAll(temp.getGrids());
 
@@ -612,6 +695,41 @@ public class Window extends javax.swing.JFrame {
 
     }
 
+    private void importGrid(GridValue[][] newGrid) {
+        GridValue[][] oldGrid = gridValuesList.get(index);
+
+        for (int lin = 0; lin < oldGrid.length; lin++) {
+            for (int col = 0; col < oldGrid[lin].length; col++) {
+                oldGrid[lin][col] = newGrid[col][lin];
+
+                if (defaultValue.getPlain().equals(newGrid[col][lin].getPlain())) {
+                    oldGrid[lin][col] = defaultValue;
+                } else {
+                    oldGrid[lin][col] = newGrid[col][lin];
+                }
+            }
+        }
+
+        /*for (int col = 0; col < oldGrid.length; col++) {
+
+         if (col == newGrid.length) {
+         break;
+         }
+         for (int lin = 0; lin < oldGrid[col].length; lin++) {
+
+         if (lin == newGrid[col].length) {
+         System.out.printf("%d lin ", lin);
+         continue;
+         }
+         if (defaultValue.getPlain().equals(newGrid[col][lin].getPlain())) {
+         oldGrid[lin][col] = defaultValue;
+         } else {
+         oldGrid[lin][col] = newGrid[col][lin];
+         }
+         }
+         }*/
+    }
+
     public enum TabNames {
 
         DEFAULT("Default"), TILES("Tiles"), COLORS("Colors");
@@ -627,6 +745,34 @@ public class Window extends javax.swing.JFrame {
 
     }
 
+    public enum ButtonType {
+
+        PLAIN, IMAGE, COLOR
+    }
+
+    private void add(List<GridValue> lst, TabNames name, ButtonType btnType) {
+        int listSize = lst.size();
+
+        JPanel newPanel = new JPanel();
+        newPanel.setName(name.getName());
+        newPanel.setLayout(new GridLayout(listSize / 5, listSize / 10));
+
+        for (GridValue gv : lst) {
+            JButton b = createButton(gv);
+
+            if (ButtonType.IMAGE != btnType) {
+                b.setName(btnType.name());
+            }
+
+            newPanel.add(b);
+        }
+
+        tabValues.addTab(newPanel.getName(), newPanel);
+        tabValues.setSelectedIndex(tabValues.getTabCount() - 1);
+
+        super.pack();
+    }
+
     private void addColorsGrid() {
         ColorsMapJDialog dialog = new ColorsMapJDialog(this, true);
         dialog.setLocationRelativeTo(this);
@@ -636,22 +782,7 @@ public class Window extends javax.swing.JFrame {
             return;
         }
 
-        int listSize = dialog.getList().size();
-
-        JPanel newPanel = new JPanel();
-        newPanel.setName(TabNames.COLORS.getName());
-        newPanel.setLayout(new GridLayout(listSize / 5, listSize / 10));
-
-        for (GridValue gv : dialog.getList()) {
-            JButton b = createButton(gv);
-            b.setName("color");
-            newPanel.add(b);
-        }
-
-        tabValues.addTab(newPanel.getName(), newPanel);
-        tabValues.setSelectedIndex(tabValues.getTabCount() - 1);
-
-        super.pack();
+        add(dialog.getList(), TabNames.COLORS, ButtonType.COLOR);
     }
 
     private void addTilesGrid() {
@@ -663,25 +794,7 @@ public class Window extends javax.swing.JFrame {
             return;
         }
 
-        int listSize = dialog.getList().size();
-
-        JPanel newPanel = new JPanel();
-        newPanel.setName(TabNames.TILES.getName());
-        newPanel.setLayout(new GridLayout(listSize / 5, listSize / 10));
-
-        for (GridValue gv : dialog.getList()) {
-            JButton b = createButton(gv);
-            b.setName("tile");
-            newPanel.add(b);
-        }
-
-        /*for (JButton b : buttonValues) {
-         newPanel.add(b);
-         }*/
-        tabValues.addTab(newPanel.getName(), newPanel);
-        tabValues.setSelectedIndex(tabValues.getTabCount() - 1);
-
-        super.pack();
+        add(dialog.getList(), TabNames.TILES, ButtonType.IMAGE);
     }
 
     private void configureNewProject(ProjectObject po) {
@@ -760,7 +873,7 @@ public class Window extends javax.swing.JFrame {
 
     private void selectValue(JButton btn) {
         selected = btn;
-        lblValueSelected.setText(String.format("Value selected: %s", getText(btn)));
+        lblValueSelected.setText(String.format("Value sel: %s", getText(btn)));
     }
 
     private JPanel createCanvas() {
@@ -893,9 +1006,9 @@ public class Window extends javax.swing.JFrame {
                 int px = e.getPoint().x / x;
                 int py = e.getPoint().y / y;
 
-                if (e.getButton() == MouseEvent.BUTTON1) {
-                    GridValue[][] gridArray = gridValuesList.get(index);
+                GridValue[][] gridArray = gridValuesList.get(index);
 
+                if (e.getButton() == MouseEvent.BUTTON1) {
                     //System.out.printf("x %d y %d - px %d py %d\n", x, y, px, py);
                     if (!isValid(px, py, gridArray)) {
                         return;
@@ -904,34 +1017,35 @@ public class Window extends javax.swing.JFrame {
                     if (btnFillLine.isSelected() || btnFillColumn.isSelected()) {
 
                         if (btnFillLine.isSelected()) {
-                            for (int i = 0; i < gridArray.length; i++) {
-                                gridArray[i][py] = btnEmptyLinCol.isSelected() ? defaultValue : createNewValue(selected);
-
+                            for (GridValue[] gv : gridArray) {
+                                gv[py] = btnEmptyLinCol.isSelected() ? defaultValue : createNewValue(selected);
                             }
                         }
 
                         if (btnFillColumn.isSelected()) {
+
                             for (int i = 0; i < gridArray[0].length; i++) {
                                 gridArray[px][i] = btnEmptyLinCol.isSelected() ? defaultValue : createNewValue(selected);
                             }
                         }
 
                     } else {
-                        /*GridValue temp;
-                         if(gridArray[px][py] == defaultValue){
-                         temp = new GridValue(0, getText(selected), getImage(selected));
-                         }else if (gridArray[px][py].equals(null)){
-                         temp = defaultValue;
-                         }else{
-                         temp = new GridValue(0, getText(selected), getImage(selected);
-                         }
-                         gridArray[px][py] = temp;*/
-                        gridArray[px][py] = defaultValue.equals(gridArray[px][py]) ? createNewValue(selected) : defaultValue;
+                        GridValue temp;
+                        if (gridArray[px][py] == null || defaultValue.equals(gridArray[px][py])) {
+                            temp = createNewValue(selected);
 
-                        //System.out.println("defVal " + defVal);
-                        //System.out.println("valSel " + valSel);
-                        //System.out.println("gridArray[px][py] " + gridArray[px][py]);
+                        } else if (isSameButton(selected, gridArray[px][py])) {
+                            temp = defaultValue;
+
+                        } else {
+                            temp = createNewValue(selected);
+                        }
+
+                        gridArray[px][py] = temp;
                     }
+
+                } else {
+                    gridArray[px][py] = defaultValue;
                 }
             }
 
@@ -976,14 +1090,26 @@ public class Window extends javax.swing.JFrame {
         return c;
     }
 
-    private GridValue createNewValue(JButton selected) {
-        GridValue g = new GridValue(0, getText(selected), getImage(selected));
+    private int generateId(JButton btn) {
+        String temp = (btn.getText() != null ? btn.getText() : "") + (btn.getName() != null ? btn.getName() : "");
+        return temp.hashCode();
+    }
 
-        if ("color".equals(selected.getName())) {
-            g.setColor(selected.getBackground());
+    private GridValue createNewValue(JButton btn) {
+        int id = generateId(btn);
+
+        //System.out.println("id = " + id);
+        GridValue g = new GridValue(id, getText(btn), getImage(btn));
+
+        if (ButtonType.COLOR.name().equals(btn.getName())) {
+            g.setColor(btn.getBackground());
         }
 
         return g;
+    }
+
+    private boolean isSameButton(JButton btn, GridValue value) {
+        return generateId(btn) == value.getId();
     }
 
     private void updateMousePosition() {
@@ -1014,6 +1140,7 @@ public class Window extends javax.swing.JFrame {
     private javax.swing.JButton btnAddColors;
     private javax.swing.JButton btnAddTab;
     private javax.swing.JButton btnCode;
+    private javax.swing.JButton btnEditTab;
     private javax.swing.JToggleButton btnEmptyLinCol;
     private javax.swing.JToggleButton btnFill;
     private javax.swing.JToggleButton btnFillColumn;
@@ -1030,13 +1157,14 @@ public class Window extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanel4;
     private javax.swing.JLabel lblCount;
-    private javax.swing.JLabel lblIdx;
     private javax.swing.JLabel lblPosition;
     private javax.swing.JLabel lblValueSelected;
     private javax.swing.JMenuItem miExit;
+    private javax.swing.JMenuItem miImport;
     private javax.swing.JMenuItem miNewGrid;
     private javax.swing.JMenuItem miOpen;
     private javax.swing.JMenuItem miSave;
+    private javax.swing.JMenuItem miSync;
     private javax.swing.JPanel pnDefault;
     private javax.swing.JPopupMenu.Separator sep;
     private javax.swing.JTabbedPane tabValues;
@@ -1045,6 +1173,10 @@ public class Window extends javax.swing.JFrame {
     // End of variables declaration//GEN-END:variables
 
     private void go(int id) {
+        if (gridValuesList.isEmpty()) {
+            return;
+        }
+
         int t = index + id;
 
         if (t < 0) {
@@ -1058,8 +1190,7 @@ public class Window extends javax.swing.JFrame {
     }
 
     private void updateLabels() {
-        lblCount.setText(String.valueOf(gridValuesList.size()));
-        lblIdx.setText(String.valueOf(index + 1));
+        lblCount.setText(String.format("%d de %d", index + 1, gridValuesList.isEmpty() ? 1 : gridValuesList.size()));
     }
 
     private void removeGrid() {
