@@ -66,6 +66,7 @@ public class Window extends javax.swing.JFrame {
     public static final Color line = new Color(0, 153, 255);
     public static final Color fill = Color.DARK_GRAY;
 
+    private boolean hideGrid;
     private ProjectObject po = new ProjectObject();
 
     //private final List<JButton> buttonValues = new ArrayList<>(20);
@@ -120,6 +121,11 @@ public class Window extends javax.swing.JFrame {
         btnAddTab = new javax.swing.JButton();
         btnAddColors = new javax.swing.JButton();
         btnEditTab = new javax.swing.JButton();
+        btnHideGrid = new javax.swing.JToggleButton();
+        tfWidth = new javax.swing.JTextField();
+        jLabel3 = new javax.swing.JLabel();
+        tfHeight = new javax.swing.JTextField();
+        btnLockSize = new javax.swing.JToggleButton();
         jPanel4 = new javax.swing.JPanel();
         lblPosition = new javax.swing.JLabel();
         btnCode = new javax.swing.JButton();
@@ -161,11 +167,13 @@ public class Window extends javax.swing.JFrame {
         );
 
         tfGridWid.setText("0");
+        tfGridWid.setToolTipText("Columns");
 
         jLabel2.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel2.setText(" x ");
 
         tfGridHei.setText("0");
+        tfGridHei.setToolTipText("Lines");
 
         btnLeft.setText("<");
         btnLeft.addActionListener(new java.awt.event.ActionListener() {
@@ -204,7 +212,7 @@ public class Window extends javax.swing.JFrame {
 
         lblValueSelected.setText("Value sel:");
 
-        btnEmptyLinCol.setText("#");
+        btnEmptyLinCol.setText("[]");
         btnEmptyLinCol.setToolTipText("Clear");
 
         tabValues.setTabLayoutPolicy(javax.swing.JTabbedPane.SCROLL_TAB_LAYOUT);
@@ -233,52 +241,85 @@ public class Window extends javax.swing.JFrame {
         btnEditTab.setText("!");
         btnEditTab.setToolTipText("Edit tab selected");
 
+        btnHideGrid.setText("#");
+        btnHideGrid.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnHideGridActionPerformed(evt);
+            }
+        });
+
+        tfWidth.setText("800");
+        tfWidth.setToolTipText("Width");
+
+        jLabel3.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel3.setText(" x ");
+
+        tfHeight.setText("600");
+        tfHeight.setToolTipText("Height");
+
+        btnLockSize.setText("&");
+        btnLockSize.setToolTipText("Lock size");
+
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
         jPanel3Layout.setHorizontalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel3Layout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(btnFill, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addGroup(jPanel3Layout.createSequentialGroup()
-                        .addComponent(btnLeft)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(btnRigth)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(btnAdd, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(btnRemove, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addGap(0, 0, Short.MAX_VALUE))
-                    .addGroup(jPanel3Layout.createSequentialGroup()
-                        .addComponent(btnFillLine)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(btnFillColumn)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 66, Short.MAX_VALUE)
-                        .addComponent(btnEmptyLinCol))
-                    .addGroup(jPanel3Layout.createSequentialGroup()
-                        .addComponent(tfGridWid, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(tfGridHei, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(jPanel3Layout.createSequentialGroup()
-                        .addComponent(lblValueSelected, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(btnEditTab))
-                    .addComponent(lblCount, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addContainerGap())
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
                 .addGap(0, 0, Short.MAX_VALUE)
                 .addComponent(btnAddColors)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(btnAddTab))
             .addComponent(tabValues, javax.swing.GroupLayout.Alignment.TRAILING)
+            .addGroup(jPanel3Layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(btnFill, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addGroup(jPanel3Layout.createSequentialGroup()
+                        .addComponent(lblValueSelected, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(btnEditTab))
+                    .addComponent(lblCount, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addGroup(jPanel3Layout.createSequentialGroup()
+                        .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(jPanel3Layout.createSequentialGroup()
+                                .addComponent(btnLeft)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(btnRigth)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(btnAdd, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(btnRemove, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                            .addGroup(jPanel3Layout.createSequentialGroup()
+                                .addComponent(btnFillLine)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(btnFillColumn)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(btnEmptyLinCol)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(btnHideGrid))
+                            .addGroup(jPanel3Layout.createSequentialGroup()
+                                .addComponent(tfGridHei, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(4, 4, 4)
+                                .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(tfGridWid, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(jPanel3Layout.createSequentialGroup()
+                                .addComponent(tfWidth, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(4, 4, 4)
+                                .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(tfHeight, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(btnLockSize)))
+                        .addGap(0, 13, Short.MAX_VALUE)))
+                .addContainerGap())
         );
 
         jPanel3Layout.linkSize(javax.swing.SwingConstants.HORIZONTAL, new java.awt.Component[] {btnAdd, btnLeft, btnRemove, btnRigth});
 
         jPanel3Layout.linkSize(javax.swing.SwingConstants.HORIZONTAL, new java.awt.Component[] {btnEmptyLinCol, btnFillColumn, btnFillLine});
+
+        jPanel3Layout.linkSize(javax.swing.SwingConstants.HORIZONTAL, new java.awt.Component[] {jLabel2, tfGridHei, tfGridWid});
 
         jPanel3Layout.setVerticalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -287,7 +328,7 @@ public class Window extends javax.swing.JFrame {
                     .addComponent(btnAddTab)
                     .addComponent(btnAddColors))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(tabValues, javax.swing.GroupLayout.DEFAULT_SIZE, 210, Short.MAX_VALUE)
+                .addComponent(tabValues, javax.swing.GroupLayout.DEFAULT_SIZE, 172, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(lblValueSelected)
@@ -298,7 +339,8 @@ public class Window extends javax.swing.JFrame {
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnFillLine)
                     .addComponent(btnFillColumn)
-                    .addComponent(btnEmptyLinCol))
+                    .addComponent(btnEmptyLinCol)
+                    .addComponent(btnHideGrid))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnLeft)
@@ -309,10 +351,16 @@ public class Window extends javax.swing.JFrame {
                 .addComponent(lblCount)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(tfGridWid, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel2)
-                    .addComponent(tfGridHei, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap())
+                    .addComponent(tfGridHei, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(tfGridWid, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel3)
+                    .addComponent(tfWidth, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(tfHeight, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnLockSize))
+                .addGap(20, 20, 20))
         );
 
         jPanel3Layout.linkSize(javax.swing.SwingConstants.VERTICAL, new java.awt.Component[] {btnAdd, btnEmptyLinCol, btnFillColumn, btnFillLine, btnLeft, btnRemove, btnRigth});
@@ -551,7 +599,7 @@ public class Window extends javax.swing.JFrame {
                 for (GridValue gv : values) {
 
                     //TODO melhorar comparacao
-                    if (gv.getPlain().equals(btn.getText())) {
+                    if (gv.getPlain().equals(getText(btn))) {
                         configureValue(gv, btn);
                     }
                 }
@@ -559,6 +607,13 @@ public class Window extends javax.swing.JFrame {
         }
 
     }//GEN-LAST:event_miSyncActionPerformed
+
+    private void btnHideGridActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnHideGridActionPerformed
+
+        hideGrid = btnHideGrid.isSelected();
+
+
+    }//GEN-LAST:event_btnHideGridActionPerformed
 
     private void configureValue(GridValue gv, JButton btn) {
         int id = generateId(btn);
@@ -889,8 +944,17 @@ public class Window extends javax.swing.JFrame {
 
                 Dimension grid = po.getGrid();
 
-                size.x = getWidth();
-                size.y = getHeight();
+                if (btnLockSize.isSelected()) {
+                    try {
+                        size.x = Integer.parseInt(tfWidth.getText());
+                        size.y = Integer.parseInt(tfHeight.getText());
+                    } catch (NumberFormatException e) {
+
+                    }
+                } else {
+                    size.x = getWidth();
+                    size.y = getHeight();
+                }
 
                 int x = size.x / grid.width;
                 int y = size.y / grid.height;
@@ -918,7 +982,6 @@ public class Window extends javax.swing.JFrame {
                         } else {
 
                             if (btnFill.isSelected()) {
-
                                 if (value.isImage()) {
                                     g.drawImage(value.getImage(), col * x, lin * y, null);
 
@@ -939,16 +1002,16 @@ public class Window extends javax.swing.JFrame {
                     }
                 }
 
-                g.setColor(line);
+                if (!hideGrid) {
+                    g.setColor(line);
+                    for (int i = 0; i < size.x; i += x) {
+                        g.drawLine(i, 0, i, size.y);
+                    }
 
-                for (int i = 0; i < size.x; i += x) {
-                    g.drawLine(i, 0, i, size.y);
+                    for (int i = 0; i < size.y; i += y) {
+                        g.drawLine(0, i, size.x, i);
+                    }
                 }
-
-                for (int i = 0; i < size.y; i += y) {
-                    g.drawLine(0, i, size.x, i);
-                }
-
                 g.setColor(front);
                 //int px = e.getPoint().x / x;
                 //int py = e.getPoint().y / y;
@@ -1091,6 +1154,10 @@ public class Window extends javax.swing.JFrame {
     }
 
     private int generateId(JButton btn) {
+        if (defaultValue.getPlain().equals(getText(btn))) {
+            return -1;
+        }
+
         String temp = (btn.getText() != null ? btn.getText() : "") + (btn.getName() != null ? btn.getName() : "");
         return temp.hashCode();
     }
@@ -1145,11 +1212,14 @@ public class Window extends javax.swing.JFrame {
     private javax.swing.JToggleButton btnFill;
     private javax.swing.JToggleButton btnFillColumn;
     private javax.swing.JToggleButton btnFillLine;
+    private javax.swing.JToggleButton btnHideGrid;
     private javax.swing.JButton btnLeft;
+    private javax.swing.JToggleButton btnLockSize;
     private javax.swing.JButton btnRemove;
     private javax.swing.JButton btnRigth;
     private javax.swing.JPanel canvas;
     private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
     private javax.swing.JMenu jMenu1;
     private javax.swing.JMenu jMenu2;
     private javax.swing.JMenuBar jMenuBar1;
@@ -1170,6 +1240,8 @@ public class Window extends javax.swing.JFrame {
     private javax.swing.JTabbedPane tabValues;
     private javax.swing.JTextField tfGridHei;
     private javax.swing.JTextField tfGridWid;
+    private javax.swing.JTextField tfHeight;
+    private javax.swing.JTextField tfWidth;
     // End of variables declaration//GEN-END:variables
 
     private void go(int id) {

@@ -181,43 +181,6 @@
       <Layout>
         <DimensionLayout dim="0">
           <Group type="103" groupAlignment="0" attributes="0">
-              <Group type="102" attributes="0">
-                  <EmptySpace max="-2" attributes="0"/>
-                  <Group type="103" groupAlignment="0" attributes="0">
-                      <Component id="btnFill" max="32767" attributes="0"/>
-                      <Group type="102" alignment="0" attributes="0">
-                          <Component id="btnLeft" linkSize="5" min="-2" max="-2" attributes="0"/>
-                          <EmptySpace max="-2" attributes="0"/>
-                          <Component id="btnRigth" linkSize="5" min="-2" max="-2" attributes="0"/>
-                          <EmptySpace max="-2" attributes="0"/>
-                          <Component id="btnAdd" linkSize="5" max="32767" attributes="0"/>
-                          <EmptySpace max="-2" attributes="0"/>
-                          <Component id="btnRemove" linkSize="5" max="32767" attributes="0"/>
-                          <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
-                      </Group>
-                      <Group type="102" alignment="0" attributes="0">
-                          <Component id="btnFillLine" linkSize="6" min="-2" max="-2" attributes="0"/>
-                          <EmptySpace max="-2" attributes="0"/>
-                          <Component id="btnFillColumn" linkSize="6" min="-2" max="-2" attributes="0"/>
-                          <EmptySpace pref="66" max="32767" attributes="0"/>
-                          <Component id="btnEmptyLinCol" linkSize="6" min="-2" max="-2" attributes="0"/>
-                      </Group>
-                      <Group type="102" alignment="0" attributes="0">
-                          <Component id="tfGridWid" min="-2" pref="41" max="-2" attributes="0"/>
-                          <EmptySpace max="-2" attributes="0"/>
-                          <Component id="jLabel2" max="32767" attributes="0"/>
-                          <EmptySpace max="-2" attributes="0"/>
-                          <Component id="tfGridHei" min="-2" pref="41" max="-2" attributes="0"/>
-                      </Group>
-                      <Group type="102" alignment="0" attributes="0">
-                          <Component id="lblValueSelected" max="32767" attributes="0"/>
-                          <EmptySpace max="-2" attributes="0"/>
-                          <Component id="btnEditTab" min="-2" max="-2" attributes="0"/>
-                      </Group>
-                      <Component id="lblCount" max="32767" attributes="0"/>
-                  </Group>
-                  <EmptySpace max="-2" attributes="0"/>
-              </Group>
               <Group type="102" alignment="1" attributes="0">
                   <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
                   <Component id="btnAddColors" min="-2" max="-2" attributes="0"/>
@@ -225,6 +188,58 @@
                   <Component id="btnAddTab" min="-2" max="-2" attributes="0"/>
               </Group>
               <Component id="tabValues" alignment="1" max="32767" attributes="0"/>
+              <Group type="102" attributes="0">
+                  <EmptySpace max="-2" attributes="0"/>
+                  <Group type="103" groupAlignment="0" attributes="0">
+                      <Component id="btnFill" max="32767" attributes="0"/>
+                      <Group type="102" alignment="0" attributes="0">
+                          <Component id="lblValueSelected" max="32767" attributes="0"/>
+                          <EmptySpace max="-2" attributes="0"/>
+                          <Component id="btnEditTab" min="-2" max="-2" attributes="0"/>
+                      </Group>
+                      <Component id="lblCount" max="32767" attributes="0"/>
+                      <Group type="102" attributes="0">
+                          <Group type="103" groupAlignment="0" attributes="0">
+                              <Group type="102" alignment="0" attributes="0">
+                                  <Component id="btnLeft" linkSize="5" min="-2" max="-2" attributes="0"/>
+                                  <EmptySpace max="-2" attributes="0"/>
+                                  <Component id="btnRigth" linkSize="5" min="-2" max="-2" attributes="0"/>
+                                  <EmptySpace max="-2" attributes="0"/>
+                                  <Component id="btnAdd" linkSize="5" max="32767" attributes="0"/>
+                                  <EmptySpace max="-2" attributes="0"/>
+                                  <Component id="btnRemove" linkSize="5" max="32767" attributes="0"/>
+                              </Group>
+                              <Group type="102" alignment="0" attributes="0">
+                                  <Component id="btnFillLine" linkSize="6" min="-2" max="-2" attributes="0"/>
+                                  <EmptySpace max="-2" attributes="0"/>
+                                  <Component id="btnFillColumn" linkSize="6" min="-2" max="-2" attributes="0"/>
+                                  <EmptySpace max="-2" attributes="0"/>
+                                  <Component id="btnEmptyLinCol" linkSize="6" min="-2" max="-2" attributes="0"/>
+                                  <EmptySpace max="-2" attributes="0"/>
+                                  <Component id="btnHideGrid" min="-2" max="-2" attributes="0"/>
+                              </Group>
+                              <Group type="102" alignment="0" attributes="0">
+                                  <Component id="tfGridHei" linkSize="8" min="-2" pref="41" max="-2" attributes="0"/>
+                                  <EmptySpace min="-2" pref="4" max="-2" attributes="0"/>
+                                  <Component id="jLabel2" linkSize="8" min="-2" pref="41" max="-2" attributes="0"/>
+                                  <EmptySpace max="-2" attributes="0"/>
+                                  <Component id="tfGridWid" linkSize="8" min="-2" pref="41" max="-2" attributes="0"/>
+                              </Group>
+                              <Group type="102" alignment="0" attributes="0">
+                                  <Component id="tfWidth" min="-2" pref="41" max="-2" attributes="0"/>
+                                  <EmptySpace min="-2" pref="4" max="-2" attributes="0"/>
+                                  <Component id="jLabel3" min="-2" pref="41" max="-2" attributes="0"/>
+                                  <EmptySpace max="-2" attributes="0"/>
+                                  <Component id="tfHeight" min="-2" pref="41" max="-2" attributes="0"/>
+                                  <EmptySpace max="-2" attributes="0"/>
+                                  <Component id="btnLockSize" min="-2" max="-2" attributes="0"/>
+                              </Group>
+                          </Group>
+                          <EmptySpace min="0" pref="13" max="32767" attributes="0"/>
+                      </Group>
+                  </Group>
+                  <EmptySpace max="-2" attributes="0"/>
+              </Group>
           </Group>
         </DimensionLayout>
         <DimensionLayout dim="1">
@@ -235,7 +250,7 @@
                       <Component id="btnAddColors" alignment="3" min="-2" max="-2" attributes="0"/>
                   </Group>
                   <EmptySpace max="-2" attributes="0"/>
-                  <Component id="tabValues" pref="210" max="32767" attributes="0"/>
+                  <Component id="tabValues" pref="172" max="32767" attributes="0"/>
                   <EmptySpace max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="3" attributes="0">
                       <Component id="lblValueSelected" alignment="3" min="-2" max="-2" attributes="0"/>
@@ -248,6 +263,7 @@
                       <Component id="btnFillLine" linkSize="7" alignment="3" min="-2" max="-2" attributes="0"/>
                       <Component id="btnFillColumn" linkSize="7" alignment="3" min="-2" max="-2" attributes="0"/>
                       <Component id="btnEmptyLinCol" linkSize="7" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Component id="btnHideGrid" alignment="3" min="-2" max="-2" attributes="0"/>
                   </Group>
                   <EmptySpace max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="3" attributes="0">
@@ -260,11 +276,18 @@
                   <Component id="lblCount" min="-2" max="-2" attributes="0"/>
                   <EmptySpace max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="3" attributes="0">
-                      <Component id="tfGridWid" alignment="3" min="-2" max="-2" attributes="0"/>
                       <Component id="jLabel2" alignment="3" min="-2" max="-2" attributes="0"/>
                       <Component id="tfGridHei" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Component id="tfGridWid" alignment="3" min="-2" max="-2" attributes="0"/>
                   </Group>
                   <EmptySpace max="-2" attributes="0"/>
+                  <Group type="103" groupAlignment="3" attributes="0">
+                      <Component id="jLabel3" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Component id="tfWidth" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Component id="tfHeight" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Component id="btnLockSize" alignment="3" min="-2" max="-2" attributes="0"/>
+                  </Group>
+                  <EmptySpace min="-2" pref="20" max="-2" attributes="0"/>
               </Group>
           </Group>
         </DimensionLayout>
@@ -273,6 +296,7 @@
         <Component class="javax.swing.JTextField" name="tfGridWid">
           <Properties>
             <Property name="text" type="java.lang.String" value="0"/>
+            <Property name="toolTipText" type="java.lang.String" value="Columns"/>
           </Properties>
         </Component>
         <Component class="javax.swing.JLabel" name="jLabel2">
@@ -284,6 +308,7 @@
         <Component class="javax.swing.JTextField" name="tfGridHei">
           <Properties>
             <Property name="text" type="java.lang.String" value="0"/>
+            <Property name="toolTipText" type="java.lang.String" value="Lines"/>
           </Properties>
         </Component>
         <Component class="javax.swing.JButton" name="btnLeft">
@@ -341,7 +366,7 @@
         </Component>
         <Component class="javax.swing.JToggleButton" name="btnEmptyLinCol">
           <Properties>
-            <Property name="text" type="java.lang.String" value="#"/>
+            <Property name="text" type="java.lang.String" value="[]"/>
             <Property name="toolTipText" type="java.lang.String" value="Clear"/>
           </Properties>
         </Component>
@@ -399,6 +424,38 @@
           <Properties>
             <Property name="text" type="java.lang.String" value="!"/>
             <Property name="toolTipText" type="java.lang.String" value="Edit tab selected"/>
+          </Properties>
+        </Component>
+        <Component class="javax.swing.JToggleButton" name="btnHideGrid">
+          <Properties>
+            <Property name="text" type="java.lang.String" value="#"/>
+          </Properties>
+          <Events>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnHideGridActionPerformed"/>
+          </Events>
+        </Component>
+        <Component class="javax.swing.JTextField" name="tfWidth">
+          <Properties>
+            <Property name="text" type="java.lang.String" value="800"/>
+            <Property name="toolTipText" type="java.lang.String" value="Width"/>
+          </Properties>
+        </Component>
+        <Component class="javax.swing.JLabel" name="jLabel3">
+          <Properties>
+            <Property name="horizontalAlignment" type="int" value="0"/>
+            <Property name="text" type="java.lang.String" value=" x "/>
+          </Properties>
+        </Component>
+        <Component class="javax.swing.JTextField" name="tfHeight">
+          <Properties>
+            <Property name="text" type="java.lang.String" value="600"/>
+            <Property name="toolTipText" type="java.lang.String" value="Height"/>
+          </Properties>
+        </Component>
+        <Component class="javax.swing.JToggleButton" name="btnLockSize">
+          <Properties>
+            <Property name="text" type="java.lang.String" value="&amp;"/>
+            <Property name="toolTipText" type="java.lang.String" value="Lock size"/>
           </Properties>
         </Component>
       </SubComponents>
