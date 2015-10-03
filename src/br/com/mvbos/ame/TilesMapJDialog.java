@@ -283,8 +283,6 @@ public class TilesMapJDialog extends javax.swing.JDialog {
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Tiles map");
 
-        tfFile.setText("C:\\Users\\Marcus Becker\\Documents\\LgJ Fontes\\Cap07\\imagens\\tiles_cenario.png");
-
         btnFC.setText("Image...");
         btnFC.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {

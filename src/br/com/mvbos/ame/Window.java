@@ -7,6 +7,7 @@ import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Graphics;
+import java.awt.Graphics2D;
 import java.awt.GridLayout;
 
 import java.awt.Point;
@@ -57,17 +58,18 @@ public class Window extends javax.swing.JFrame {
     private int index;
     private final List<GridValue[][]> gridValuesList = new ArrayList<>(10);
 
-    private Point size = new Point(810, 600);
-
     private Point pxy = new Point(0, 0);
+    private final Point size = new Point(810, 600);
 
     public static final Color front = Color.LIGHT_GRAY;
     public static final Color back = new Color(248, 248, 248);
     public static final Color line = new Color(0, 153, 255);
     public static final Color fill = Color.DARK_GRAY;
 
-    private boolean hideGrid;
+    private boolean showGrid;
     private ProjectObject po = new ProjectObject();
+
+    private static GridValue[][] temporary;
 
     //private final List<JButton> buttonValues = new ArrayList<>(20);
     //private char[] copy;// = new char[18];
@@ -89,6 +91,8 @@ public class Window extends javax.swing.JFrame {
 
         timer.start();
         updateLabels();
+
+        showGrid = btnShowGrid.isSelected();
     }
 
     /**
@@ -101,6 +105,7 @@ public class Window extends javax.swing.JFrame {
     private void initComponents() {
 
         jPanel1 = new javax.swing.JPanel();
+        lblProject = new javax.swing.JLabel();
         canvas = createCanvas();
         jPanel3 = new javax.swing.JPanel();
         tfGridWid = new javax.swing.JTextField();
@@ -121,7 +126,7 @@ public class Window extends javax.swing.JFrame {
         btnAddTab = new javax.swing.JButton();
         btnAddColors = new javax.swing.JButton();
         btnEditTab = new javax.swing.JButton();
-        btnHideGrid = new javax.swing.JToggleButton();
+        btnShowGrid = new javax.swing.JToggleButton();
         tfWidth = new javax.swing.JTextField();
         jLabel3 = new javax.swing.JLabel();
         tfHeight = new javax.swing.JTextField();
@@ -129,6 +134,7 @@ public class Window extends javax.swing.JFrame {
         jPanel4 = new javax.swing.JPanel();
         lblPosition = new javax.swing.JLabel();
         btnCode = new javax.swing.JButton();
+        btnPreview = new javax.swing.JButton();
         jMenuBar1 = new javax.swing.JMenuBar();
         jMenu1 = new javax.swing.JMenu();
         miNewGrid = new javax.swing.JMenuItem();
@@ -139,18 +145,29 @@ public class Window extends javax.swing.JFrame {
         jMenu2 = new javax.swing.JMenu();
         miImport = new javax.swing.JMenuItem();
         miSync = new javax.swing.JMenuItem();
+        jMenuItem1 = new javax.swing.JMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setTitle("Array Map Editor - for Games");
+
+        lblProject.setFont(new java.awt.Font("Tahoma", 0, 16)); // NOI18N
+        lblProject.setText("Please, create a new project.");
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 840, Short.MAX_VALUE)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(lblProject, javax.swing.GroupLayout.PREFERRED_SIZE, 804, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 42, Short.MAX_VALUE)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(lblProject)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         canvas.setBackground(new java.awt.Color(0, 153, 204));
@@ -159,7 +176,7 @@ public class Window extends javax.swing.JFrame {
         canvas.setLayout(canvasLayout);
         canvasLayout.setHorizontalGroup(
             canvasLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 0, Short.MAX_VALUE)
+            .addGap(0, 609, Short.MAX_VALUE)
         );
         canvasLayout.setVerticalGroup(
             canvasLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -240,11 +257,13 @@ public class Window extends javax.swing.JFrame {
 
         btnEditTab.setText("!");
         btnEditTab.setToolTipText("Edit tab selected");
+        btnEditTab.setEnabled(false);
 
-        btnHideGrid.setText("#");
-        btnHideGrid.addActionListener(new java.awt.event.ActionListener() {
+        btnShowGrid.setSelected(true);
+        btnShowGrid.setText("#");
+        btnShowGrid.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnHideGridActionPerformed(evt);
+                btnShowGridActionPerformed(evt);
             }
         });
 
@@ -296,7 +315,7 @@ public class Window extends javax.swing.JFrame {
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(btnEmptyLinCol)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(btnHideGrid))
+                                .addComponent(btnShowGrid))
                             .addGroup(jPanel3Layout.createSequentialGroup()
                                 .addComponent(tfGridHei, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addGap(4, 4, 4)
@@ -328,7 +347,7 @@ public class Window extends javax.swing.JFrame {
                     .addComponent(btnAddTab)
                     .addComponent(btnAddColors))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(tabValues, javax.swing.GroupLayout.DEFAULT_SIZE, 172, Short.MAX_VALUE)
+                .addComponent(tabValues, javax.swing.GroupLayout.DEFAULT_SIZE, 174, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(lblValueSelected)
@@ -340,7 +359,7 @@ public class Window extends javax.swing.JFrame {
                     .addComponent(btnFillLine)
                     .addComponent(btnFillColumn)
                     .addComponent(btnEmptyLinCol)
-                    .addComponent(btnHideGrid))
+                    .addComponent(btnShowGrid))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnLeft)
@@ -374,6 +393,13 @@ public class Window extends javax.swing.JFrame {
             }
         });
 
+        btnPreview.setText("Preview");
+        btnPreview.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnPreviewActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
         jPanel4.setLayout(jPanel4Layout);
         jPanel4Layout.setHorizontalGroup(
@@ -383,6 +409,8 @@ public class Window extends javax.swing.JFrame {
                 .addComponent(lblPosition, javax.swing.GroupLayout.PREFERRED_SIZE, 115, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(btnCode)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(btnPreview)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel4Layout.setVerticalGroup(
@@ -391,7 +419,8 @@ public class Window extends javax.swing.JFrame {
                 .addContainerGap()
                 .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(lblPosition)
-                    .addComponent(btnCode))
+                    .addComponent(btnCode)
+                    .addComponent(btnPreview))
                 .addContainerGap(15, Short.MAX_VALUE))
         );
 
@@ -453,6 +482,16 @@ public class Window extends javax.swing.JFrame {
             }
         });
         jMenu2.add(miSync);
+
+        jMenuItem1.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_Z, java.awt.event.InputEvent.CTRL_MASK));
+        jMenuItem1.setText("Undo");
+        jMenuItem1.setEnabled(false);
+        jMenuItem1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem1ActionPerformed(evt);
+            }
+        });
+        jMenu2.add(jMenuItem1);
 
         jMenuBar1.add(jMenu2);
 
@@ -608,12 +647,22 @@ public class Window extends javax.swing.JFrame {
 
     }//GEN-LAST:event_miSyncActionPerformed
 
-    private void btnHideGridActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnHideGridActionPerformed
+    private void btnShowGridActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnShowGridActionPerformed
 
-        hideGrid = btnHideGrid.isSelected();
+        showGrid = btnShowGrid.isSelected();
 
 
-    }//GEN-LAST:event_btnHideGridActionPerformed
+    }//GEN-LAST:event_btnShowGridActionPerformed
+
+    private void btnPreviewActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPreviewActionPerformed
+
+        new PreviewWindow(po.getGrid(), gridValuesList.get(index)).setVisible(true);
+
+    }//GEN-LAST:event_btnPreviewActionPerformed
+
+    private void jMenuItem1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem1ActionPerformed
+
+    }//GEN-LAST:event_jMenuItem1ActionPerformed
 
     private void configureValue(GridValue gv, JButton btn) {
         int id = generateId(btn);
@@ -870,6 +919,8 @@ public class Window extends javax.swing.JFrame {
         this.po = po;
         tfGridWid.setText(String.valueOf(po.getGrid().width));
         tfGridHei.setText(String.valueOf(po.getGrid().height));
+
+        lblProject.setText(po.getName());
     }
 
     private void addNewGrid() {
@@ -931,16 +982,53 @@ public class Window extends javax.swing.JFrame {
         lblValueSelected.setText(String.format("Value sel: %s", getText(btn)));
     }
 
+    public static void drawValues(int blWidth, int blHeight, boolean useImage, Graphics2D g, GridValue[][] grid) {
+        for (int col = 0; col < grid.length; col++) {
+            for (int lin = 0; lin < grid[0].length; lin++) {
+                GridValue value = grid[col][lin];
+
+                int fSize = blWidth / 3;
+                g.setFont(new Font("arial", Font.PLAIN, fSize));
+
+                if (value.equals(defaultValue)) {
+                    g.drawString(value.getPlain(), col * blWidth + fSize, lin * blHeight + fSize);
+
+                } else {
+
+                    if (useImage) {
+                        if (value.isImage()) {
+                            g.drawImage(value.getImage(), col * blWidth, lin * blHeight, null);
+
+                        } else {
+                            g.setColor(value.getColor() != null ? value.getColor() : fill);
+                            g.fillRect(col * blWidth, lin * blHeight, blWidth, blHeight);
+
+                            g.setColor(back);
+                            g.drawString(value.getPlain(), col * blWidth + fSize, lin * blHeight + fSize);
+                        }
+
+                    } else {
+                        /*if (" ".equals(value)) 
+                         g.drawString("[]", col * x + x / 2, lin * y + y / 2);*/
+                        g.drawString(value.getPlain(), col * blWidth + fSize, lin * blHeight + fSize);
+                    }
+                }
+            }
+        }
+    }
+
     private JPanel createCanvas() {
 
         JPanel c = new JPanel() {
 
             @Override
-            public void paint(Graphics g) {
+            public void paint(Graphics gg) {
                 if (gridValuesList.isEmpty()) {
-                    super.paint(g);
+                    super.paint(gg);
                     return;
                 }
+
+                Graphics2D g = (Graphics2D) gg;
 
                 Dimension grid = po.getGrid();
 
@@ -969,40 +1057,9 @@ public class Window extends javax.swing.JFrame {
 
                 g.setColor(fill);
 
-                for (int col = 0; col < gridArray.length; col++) {
-                    for (int lin = 0; lin < gridArray[0].length; lin++) {
-                        GridValue value = gridArray[col][lin];
+                Window.drawValues(x, y, btnFill.isSelected(), g, gridArray);
 
-                        int fSize = x / 3;
-                        g.setFont(new Font("arial", Font.PLAIN, fSize));
-
-                        if (value.equals(defaultValue)) {
-                            g.drawString(value.getPlain(), col * x + fSize, lin * y + fSize);
-
-                        } else {
-
-                            if (btnFill.isSelected()) {
-                                if (value.isImage()) {
-                                    g.drawImage(value.getImage(), col * x, lin * y, null);
-
-                                } else {
-                                    g.setColor(value.getColor() != null ? value.getColor() : fill);
-                                    g.fillRect(col * x, lin * y, x, y);
-
-                                    g.setColor(back);
-                                    g.drawString(value.getPlain(), col * x + fSize, lin * y + fSize);
-                                }
-
-                            } else {
-                                /*if (" ".equals(value)) 
-                                 g.drawString("[]", col * x + x / 2, lin * y + y / 2);*/
-                                g.drawString(value.getPlain(), col * x + fSize, lin * y + fSize);
-                            }
-                        }
-                    }
-                }
-
-                if (!hideGrid) {
+                if (showGrid) {
                     g.setColor(line);
                     for (int i = 0; i < size.x; i += x) {
                         g.drawLine(i, 0, i, size.y);
@@ -1012,6 +1069,7 @@ public class Window extends javax.swing.JFrame {
                         g.drawLine(0, i, size.x, i);
                     }
                 }
+                
                 g.setColor(front);
                 //int px = e.getPoint().x / x;
                 //int py = e.getPoint().y / y;
@@ -1212,22 +1270,25 @@ public class Window extends javax.swing.JFrame {
     private javax.swing.JToggleButton btnFill;
     private javax.swing.JToggleButton btnFillColumn;
     private javax.swing.JToggleButton btnFillLine;
-    private javax.swing.JToggleButton btnHideGrid;
     private javax.swing.JButton btnLeft;
     private javax.swing.JToggleButton btnLockSize;
+    private javax.swing.JButton btnPreview;
     private javax.swing.JButton btnRemove;
     private javax.swing.JButton btnRigth;
+    private javax.swing.JToggleButton btnShowGrid;
     private javax.swing.JPanel canvas;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JMenu jMenu1;
     private javax.swing.JMenu jMenu2;
     private javax.swing.JMenuBar jMenuBar1;
+    private javax.swing.JMenuItem jMenuItem1;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanel4;
     private javax.swing.JLabel lblCount;
     private javax.swing.JLabel lblPosition;
+    private javax.swing.JLabel lblProject;
     private javax.swing.JLabel lblValueSelected;
     private javax.swing.JMenuItem miExit;
     private javax.swing.JMenuItem miImport;
