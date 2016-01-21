@@ -11,7 +11,7 @@ import javax.swing.SwingUtilities;
  *
  * @author Marcus Becker
  */
-public class app {
+public class App {
 
     /**
      * @param args the command line arguments
