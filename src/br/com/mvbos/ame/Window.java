@@ -987,9 +987,13 @@ public class Window extends javax.swing.JFrame {
                 GridValue value = grid[col][lin];
 
                 int fSize = blWidth / 3;
-                g.setFont(new Font("arial", Font.PLAIN, fSize));
+
+                if (g.getFont().getSize() != fSize) {
+                    g.setFont(new Font("arial", Font.PLAIN, fSize));
+                }
 
                 if (value.equals(defaultValue)) {
+                    g.setColor(fill);
                     g.drawString(value.getPlain(), col * blWidth + fSize, lin * blHeight + fSize);
 
                 } else {
