@@ -25,9 +25,12 @@ import java.io.ObjectOutputStream;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.LinkedHashMap;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.ImageIcon;
@@ -38,7 +41,7 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
 import javax.swing.Timer;
-import javax.swing.filechooser.FileFilter;
+import javax.swing.filechooser.FileNameExtensionFilter;
 
 /**
  *
@@ -591,18 +594,7 @@ public class Window extends javax.swing.JFrame {
     private void miOpenActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_miOpenActionPerformed
 
         JFileChooser fc = new JFileChooser(Paths.get("").toAbsolutePath().toString());
-        fc.setFileFilter(new FileFilter() {
-
-            @Override
-            public boolean accept(File f) {
-                return f.isFile() && f.getName().toLowerCase().endsWith(".ame");
-            }
-
-            @Override
-            public String getDescription() {
-                return "*.ame";
-            }
-        });
+        fc.setFileFilter(new FileNameExtensionFilter("Array Map Editor", "ame"));
 
         if (fc.showOpenDialog(this) == JFileChooser.OPEN_DIALOG) {
             open(fc.getSelectedFile());
@@ -743,19 +735,24 @@ public class Window extends javax.swing.JFrame {
         btn.setName("defaultButton");
         pnDefault.add(btn);
 
-        Map<String, List<GridValue>> tg = new LinkedHashMap<>(temp.getValues().size());
+        Map<String, Set<GridValue>> tg = new LinkedHashMap<>(temp.getValues().size());
 
         //Load tabs
         for (GridValue gv : temp.getValues()) {
+
+            if (temp.getDefaultValue().equals(gv)) {
+                continue;
+            }
+
             if (!tg.containsKey(gv.getTabName())) {
-                tg.put(gv.getTabName(), new ArrayList<GridValue>(20));
+                tg.put(gv.getTabName(), new LinkedHashSet<GridValue>(20));
             }
 
             tg.get(gv.getTabName()).add(gv);
         }
 
         for (String k : tg.keySet()) {
-            List<GridValue> gv = tg.get(k);
+            Set<GridValue> gv = tg.get(k);
 
             if (TabNames.COLORS.getName().equals(k)) {
                 add(gv, TabNames.COLORS, ButtonType.COLOR);
@@ -856,7 +853,7 @@ public class Window extends javax.swing.JFrame {
         PLAIN, IMAGE, COLOR
     }
 
-    private void add(List<GridValue> lst, TabNames name, ButtonType btnType) {
+    private void add(Collection<GridValue> lst, TabNames name, ButtonType btnType) {
         int listSize = lst.size();
 
         JPanel newPanel = new JPanel();
@@ -952,7 +949,7 @@ public class Window extends javax.swing.JFrame {
         addPlainValues(dialog.getValues());
     }
 
-    private void addPlainValues(List<GridValue> values) {
+    private void addPlainValues(Collection<GridValue> values) {
         int col = (values.size() + 1) / 2;
         int row = values.size() / 2;
 
@@ -1071,7 +1068,7 @@ public class Window extends javax.swing.JFrame {
                         g.drawLine(0, i, size.x, i);
                     }
                 }
-                
+
                 g.setColor(front);
                 //int px = e.getPoint().x / x;
                 //int py = e.getPoint().y / y;
