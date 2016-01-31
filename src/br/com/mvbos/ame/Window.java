@@ -587,7 +587,11 @@ public class Window extends javax.swing.JFrame {
 
     private void miSaveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_miSaveActionPerformed
 
-        save();
+        if (po.getName() == null) {
+            addNewGrid();
+        } else {
+            save();
+        }
 
     }//GEN-LAST:event_miSaveActionPerformed
 
